@@ -6,6 +6,7 @@
     <title>My Universe</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
         /* Base Reset */
@@ -17,93 +18,56 @@
 
         body, html {
             height: 100%;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: radial-gradient(circle at center, #0B0B1A 0%, #030308 100%);
+            /* Modern Startup Font */
+            font-family: 'Poppins', sans-serif;
+            
+            /* Custom Background Image Setup */
+            background-image: url('Landing Page Background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            
             overflow: hidden; 
             color: #ffffff;
             display: flex;
+            flex-direction: column; /* Stack the header and cards vertically */
             align-items: center;
             justify-content: center;
         }
 
-        /* --- Universe Background Elements --- */
-        .orbit {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            border: 1px solid rgba(255, 255, 255, 0.03);
-            border-radius: 50%;
-            pointer-events: none;
-        }
-        .orbit-1 { width: 50vw; height: 50vw; }
-        .orbit-2 { width: 75vw; height: 75vw; }
-        .orbit-3 { width: 100vw; height: 100vw; }
-
-        .stars {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                radial-gradient(1px 1px at 20px 30px, #ffffff, rgba(0,0,0,0)),
-                radial-gradient(1px 1px at 40px 70px, #ffffff, rgba(0,0,0,0)),
-                radial-gradient(1.5px 1.5px at 90px 40px, #ffffff, rgba(0,0,0,0)),
-                radial-gradient(1px 1px at 160px 120px, #e0e0e0, rgba(0,0,0,0));
-            background-repeat: repeat;
-            background-size: 200px 200px;
-            opacity: 0.5;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        .shooting-star {
-            position: absolute;
-            top: 20%;
-            left: -10%;
-            width: 150px;
-            height: 2px;
-            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.8));
-            transform: rotate(20deg);
-            animation: shoot 5s linear infinite;
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        .shooting-star::before {
-            content: '';
-            position: absolute;
-            right: 0;
-            top: -2px;
-            width: 6px;
-            height: 6px;
-            background: #fff;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #fff, 0 0 20px #fff;
-        }
-
-        @keyframes shoot {
-            0% { transform: translate(0, 0) rotate(20deg); opacity: 1; }
-            10% { transform: translate(120vw, 40vh) rotate(20deg); opacity: 0; }
-            100% { transform: translate(120vw, 40vh) rotate(20deg); opacity: 0; }
+        /* --- Welcome Header --- */
+        .welcome-text {
+            font-size: 4.5rem;
+            font-weight: 700;
+            letter-spacing: -2px; /* Tight letter spacing is very popular in modern UI */
+            margin-bottom: 3rem;
+            text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Helps it stand out on any background */
+            
+            /* Entrance animation for the text */
+            opacity: 0;
+            transform: translateY(-30px);
+            animation: dropIn 0.8s ease-out forwards;
         }
 
         /* --- Main Content (Cards) --- */
         .container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            display: flex;
             gap: 2rem;
             width: 90%;
-            max-width: 1000px;
+            max-width: 1200px;
+            justify-content: center;
+            flex-wrap: wrap; /* Allows wrapping on smaller screens */
             z-index: 10; 
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            flex: 1 1 240px; /* Flexible sizing */
+            max-width: 280px;
+            background: rgba(255, 255, 255, 0.05); /* Slightly darker glass for image backgrounds */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 16px;
             padding: 2.5rem 1.5rem;
             text-decoration: none;
@@ -115,12 +79,15 @@
             transform-style: preserve-3d;
             transition: transform 0.1s ease-out, background 0.3s ease, box-shadow 0.3s ease;
             will-change: transform; 
+            
+            /* Prepare for slide-in animation */
+            opacity: 0;
         }
 
         .card:hover {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.1);
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
         /* Icon Styling */
@@ -129,18 +96,18 @@
             margin-bottom: 1.25rem;
             color: rgba(255, 255, 255, 0.8);
             transition: transform 0.3s ease, color 0.3s ease;
-            pointer-events: none; /* Prevents JS hover glitching */
+            pointer-events: none; 
         }
 
         .card:hover i {
-            transform: scale(1.15) translateZ(20px); /* Pops the icon out slightly in 3D */
+            transform: scale(1.15) translateZ(20px); 
             color: #ffffff;
         }
 
         .card h2 {
             font-size: 1.25rem;
-            font-weight: 400;
-            letter-spacing: 1.5px;
+            font-weight: 700;
+            letter-spacing: 1px;
             margin-bottom: 0.75rem;
             text-transform: uppercase;
             pointer-events: none;
@@ -148,19 +115,46 @@
 
         .card p {
             font-size: 0.9rem;
-            opacity: 0.6;
-            line-height: 1.4;
+            font-weight: 400;
+            opacity: 0.7;
+            line-height: 1.5;
             pointer-events: none; 
+        }
+
+        /* --- Sliding Entrance Animations --- */
+        
+        /* Text drop-in */
+        @keyframes dropIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Left slide */
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-100px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Right slide */
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(100px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Apply animations to alternating cards with a slight delay */
+        .card:nth-child(odd) {
+            animation: slideInLeft 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            animation-delay: 0.2s;
+        }
+        
+        .card:nth-child(even) {
+            animation: slideInRight 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            animation-delay: 0.4s;
         }
     </style>
 </head>
 <body>
 
-    <div class="stars"></div>
-    <div class="orbit orbit-1"></div>
-    <div class="orbit orbit-2"></div>
-    <div class="orbit orbit-3"></div>
-    <div class="shooting-star"></div>
+    <h1 class="welcome-text">Welcome.</h1>
 
     <div class="container">
         
