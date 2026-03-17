@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Universe</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
         /* Base Reset */
         * {
@@ -16,7 +19,7 @@
             height: 100%;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: radial-gradient(circle at center, #0B0B1A 0%, #030308 100%);
-            overflow: hidden; /* Keeps the shooting star from creating scrollbars */
+            overflow: hidden; 
             color: #ffffff;
             display: flex;
             align-items: center;
@@ -24,8 +27,6 @@
         }
 
         /* --- Universe Background Elements --- */
-        
-        /* Subtle Solar System Orbits */
         .orbit {
             position: absolute;
             top: 50%;
@@ -39,7 +40,6 @@
         .orbit-2 { width: 75vw; height: 75vw; }
         .orbit-3 { width: 100vw; height: 100vw; }
 
-        /* Starfield Effect (Using a CSS trick with radial gradients) */
         .stars {
             position: absolute;
             top: 0;
@@ -58,7 +58,6 @@
             pointer-events: none;
         }
 
-        /* Shooting Star Animation */
         .shooting-star {
             position: absolute;
             top: 20%;
@@ -91,14 +90,13 @@
         }
 
         /* --- Main Content (Cards) --- */
-        
         .container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 2rem;
             width: 90%;
             max-width: 1000px;
-            z-index: 10; /* Keeps cards above the stars */
+            z-index: 10; 
         }
 
         .card {
@@ -125,19 +123,34 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
+        /* Icon Styling */
+        .card i {
+            font-size: 2.5rem;
+            margin-bottom: 1.25rem;
+            color: rgba(255, 255, 255, 0.8);
+            transition: transform 0.3s ease, color 0.3s ease;
+            pointer-events: none; /* Prevents JS hover glitching */
+        }
+
+        .card:hover i {
+            transform: scale(1.15) translateZ(20px); /* Pops the icon out slightly in 3D */
+            color: #ffffff;
+        }
+
         .card h2 {
             font-size: 1.25rem;
             font-weight: 400;
             letter-spacing: 1.5px;
             margin-bottom: 0.75rem;
             text-transform: uppercase;
+            pointer-events: none;
         }
 
         .card p {
             font-size: 0.9rem;
             opacity: 0.6;
             line-height: 1.4;
-            pointer-events: none; /* Prevents text from interfering with JS hover math */
+            pointer-events: none; 
         }
     </style>
 </head>
@@ -151,22 +164,26 @@
 
     <div class="container">
         
-        <a href="https://alankcl.com/" class="card" target="_blank" rel="noopener noreferrer">
+        <a href="https://alankhoocl.github.io/Upcoming-Trip/" class="card">
+            <i class="fa-solid fa-plane-departure"></i>
             <h2>Upcoming Trip</h2>
             <p>Interactive itinerary visualizer for the next adventure.</p>
         </a>
         
-        <a href="https://alankhoocl.github.io/Trip-Split/" class="card" target="_blank" rel="noopener noreferrer">
+        <a href="https://alankhoocl.github.io/Trip-Split/" class="card">
+            <i class="fa-solid fa-wallet"></i>
             <h2>Trip Split Tool</h2>
             <p>Web application for tracking and splitting travel expenses.</p>
         </a>
         
-        <a href="https://alankhoocl.github.io/AI-Learning-Management/" class="card" target="_blank" rel="noopener noreferrer">
+        <a href="https://alankhoocl.github.io/AI-Learning-Management/" class="card">
+            <i class="fa-solid fa-brain"></i>
             <h2>A.L.A.N</h2>
             <p>Explorations in data architecture and AI management.</p>
         </a>
         
-        <a href="https://alankhoocl.github.io/AI-Job-Matcher/" class="card" target="_blank" rel="noopener noreferrer">
+        <a href="https://alankhoocl.github.io/AI-Job-Matcher/" class="card">
+            <i class="fa-solid fa-briefcase"></i>
             <h2>K.H.O.O</h2>
             <p>AI job matching tools and development projects.</p>
         </a>
