@@ -17,34 +17,37 @@
         }
 
         body, html {
-            height: 100%;
-            /* Modern Startup Font */
+            /* Changed to min-height so mobile users can scroll down if cards stack */
+            min-height: 100vh; 
             font-family: 'Poppins', sans-serif;
             
-            /* Custom Background Image Setup */
-            background-image: url('Landing Page Background.jpg');
+            /* ADDED OVERLAY: The linear-gradient creates a 60% dark wash over the image */
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('Landing Page Background.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             background-attachment: fixed;
             
-            overflow: hidden; 
+            /* Allow vertical scrolling on mobile, but hide horizontal overflow from animations */
+            overflow-x: hidden; 
             color: #ffffff;
             display: flex;
-            flex-direction: column; /* Stack the header and cards vertically */
+            flex-direction: column; 
             align-items: center;
             justify-content: center;
+            padding: 3rem 1rem; /* Gives breathing room on mobile */
         }
 
         /* --- Welcome Header --- */
         .welcome-text {
-            font-size: 4.5rem;
+            /* clamp() makes the font responsive: min 2.5rem, prefers 8vw, max 4.5rem */
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
             font-weight: 700;
-            letter-spacing: -2px; /* Tight letter spacing is very popular in modern UI */
+            letter-spacing: -2px; 
             margin-bottom: 3rem;
-            text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Helps it stand out on any background */
+            text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); 
+            text-align: center;
             
-            /* Entrance animation for the text */
             opacity: 0;
             transform: translateY(-30px);
             animation: dropIn 0.8s ease-out forwards;
@@ -54,20 +57,21 @@
         .container {
             display: flex;
             gap: 2rem;
-            width: 90%;
+            width: 100%;
             max-width: 1200px;
             justify-content: center;
-            flex-wrap: wrap; /* Allows wrapping on smaller screens */
+            flex-wrap: wrap; 
             z-index: 10; 
         }
 
         .card {
-            flex: 1 1 240px; /* Flexible sizing */
+            flex: 1 1 240px; 
             max-width: 280px;
-            background: rgba(255, 255, 255, 0.05); /* Slightly darker glass for image backgrounds */
+            /* Slightly more opaque background to stand out against the image */
+            background: rgba(255, 255, 255, 0.08); 
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 16px;
             padding: 2.5rem 1.5rem;
             text-decoration: none;
@@ -79,13 +83,11 @@
             transform-style: preserve-3d;
             transition: transform 0.1s ease-out, background 0.3s ease, box-shadow 0.3s ease;
             will-change: transform; 
-            
-            /* Prepare for slide-in animation */
             opacity: 0;
         }
 
         .card:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.15);
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
             border: 1px solid rgba(255, 255, 255, 0.3);
         }
@@ -94,7 +96,7 @@
         .card i {
             font-size: 2.5rem;
             margin-bottom: 1.25rem;
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(255, 255, 255, 0.9);
             transition: transform 0.3s ease, color 0.3s ease;
             pointer-events: none; 
         }
@@ -116,31 +118,27 @@
         .card p {
             font-size: 0.9rem;
             font-weight: 400;
-            opacity: 0.7;
+            opacity: 0.8;
             line-height: 1.5;
             pointer-events: none; 
         }
 
         /* --- Sliding Entrance Animations --- */
-        
-        /* Text drop-in */
         @keyframes dropIn {
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Left slide */
         @keyframes slideInLeft {
-            from { opacity: 0; transform: translateX(-100px); }
+            from { opacity: 0; transform: translateX(-50px); }
             to { opacity: 1; transform: translateX(0); }
         }
 
-        /* Right slide */
         @keyframes slideInRight {
-            from { opacity: 0; transform: translateX(100px); }
+            from { opacity: 0; transform: translateX(50px); }
             to { opacity: 1; transform: translateX(0); }
         }
 
-        /* Apply animations to alternating cards with a slight delay */
+        /* Animations for alternating cards */
         .card:nth-child(odd) {
             animation: slideInLeft 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
             animation-delay: 0.2s;
