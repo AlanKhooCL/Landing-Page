@@ -1,9 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GRL4KGPP7W"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-GRL4KGPP7W');
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loading...</title>
+    <title>Alan's Universe</title>
+    
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#030308">
     <link rel="apple-touch-icon" href="icon-192.png">
@@ -11,7 +20,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
-        /* Base Reset & Custom Scrollbar (Firefox) */
+        /* Base Reset & Custom Scrollbar */
         * {
             margin: 0;
             padding: 0;
@@ -20,60 +29,42 @@
             scrollbar-color: rgba(255, 255, 255, 0.3) rgba(0, 0, 0, 0.1); 
         }
 
-        /* --- Custom Scrollbar (Chrome, Edge, Safari) --- */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        ::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.1); 
-        }
-        
-        ::-webkit-scrollbar-thumb {
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.1); }
+        ::-webkit-scrollbar-thumb { 
             background: rgba(255, 255, 255, 0.3); 
             border-radius: 10px; 
         }
-        
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.5); 
-        }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.5); }
 
-        /* Fix: Separate HTML from Body so they don't double-stack heights */
-        html {
-            background-color: #030308; /* Fallback color */
-        }
+        html { background-color: #030308; }
 
         body {
-            /* Fix: 100dvh adapts perfectly to mobile address bars hiding/showing */
             min-height: 100vh;
             min-height: 100dvh; 
             font-family: 'Poppins', sans-serif;
-            
             background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('Landing Page Background.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             background-attachment: fixed;
-            
             overflow-x: hidden; 
             color: #ffffff;
             display: flex;
             flex-direction: column; 
             align-items: center;
             justify-content: center;
-            padding: 2rem 1rem; /* Slightly reduced padding to keep things centered securely */
+            padding: 2rem 1rem; 
         }
 
         /* --- Welcome Header --- */
         .welcome-text {
-            /* clamp() makes the font responsive: min 2.5rem, prefers 8vw, max 4.5rem */
             font-size: clamp(2.5rem, 8vw, 4.5rem);
             font-weight: 700;
             letter-spacing: -2px; 
             margin-bottom: 3rem;
             text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); 
             text-align: center;
-            
             opacity: 0;
             transform: translateY(-30px);
             animation: dropIn 0.8s ease-out forwards;
@@ -93,7 +84,6 @@
         .card {
             flex: 1 1 240px; 
             max-width: 280px;
-            /* Slightly more opaque background to stand out against the image */
             background: rgba(255, 255, 255, 0.08); 
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
@@ -118,62 +108,36 @@
             border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
-        /* Icon Styling */
         .card i {
             font-size: 2.5rem;
             margin-bottom: 1.25rem;
             color: rgba(255, 255, 255, 0.9);
-            transition: transform 0.3s ease, color 0.3s ease;
+            transition: transform 0.3s ease;
             pointer-events: none; 
         }
 
-        .card:hover i {
-            transform: scale(1.15) translateZ(20px); 
-            color: #ffffff;
-        }
+        .card:hover i { transform: scale(1.15) translateZ(20px); color: #ffffff; }
 
         .card h2 {
             font-size: 1.25rem;
             font-weight: 700;
-            letter-spacing: 1px;
             margin-bottom: 0.75rem;
             text-transform: uppercase;
-            pointer-events: none;
         }
 
         .card p {
             font-size: 0.9rem;
-            font-weight: 400;
             opacity: 0.8;
             line-height: 1.5;
-            pointer-events: none; 
         }
 
-        /* --- Sliding Entrance Animations --- */
-        @keyframes dropIn {
-            to { opacity: 1; transform: translateY(0); }
-        }
+        /* --- Animations --- */
+        @keyframes dropIn { to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideInLeft { from { opacity: 0; transform: translateX(-50px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes slideInRight { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: translateX(0); } }
 
-        @keyframes slideInLeft {
-            from { opacity: 0; transform: translateX(-50px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        @keyframes slideInRight {
-            from { opacity: 0; transform: translateX(50px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        /* Animations for alternating cards */
-        .card:nth-child(odd) {
-            animation: slideInLeft 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-            animation-delay: 0.2s;
-        }
-        
-        .card:nth-child(even) {
-            animation: slideInRight 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-            animation-delay: 0.4s;
-        }
+        .card:nth-child(odd) { animation: slideInLeft 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; animation-delay: 0.2s; }
+        .card:nth-child(even) { animation: slideInRight 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; animation-delay: 0.4s; }
     </style>
 </head>
 <body>
@@ -181,65 +145,61 @@
     <h1 class="welcome-text">Welcome.</h1>
 
     <div class="container">
-        
-        <a href="https://alankhoocl.github.io/Upcoming-Trip/" class="card">
+        <a href="https://alankhoocl.github.io/Upcoming-Trip/" class="card" onclick="trackClick('You Be Tripping')">
             <i class="fa-solid fa-plane-departure"></i>
             <h2>You Be Tripping</h2>
             <p>Interactive itinerary visualizer for the next adventure.</p>
         </a>
         
-        <a href="https://howkhooisthis.com" class="card">
+        <a href="https://howkhooisthis.com" class="card" onclick="trackClick('Split Me The Money')">
             <i class="fa-solid fa-wallet"></i>
             <h2>Split Me The Money</h2>
             <p>Fuss free group expenses simplifier.</p>
         </a>
         
-        <a href="https://alankhoocl.github.io/aethelgard-rpg/" class="card">
+        <a href="https://alankhoocl.github.io/aethelgard-rpg/" class="card" onclick="trackClick('A.L.A.N')">
             <i class="fa-solid fa-gamepad"></i>
             <h2>A.L.A.N</h2>
             <p>Level up while learning.</p>
         </a>      
-        
     </div> 
 
     <script>
-        const cards = document.querySelectorAll('.card');
+        function trackClick(projectName) {
+            gtag('event', 'select_content', {
+                'content_type': 'project_card',
+                'item_id': projectName
+            });
+        }
+    </script>
 
+    <script>
+        const cards = document.querySelectorAll('.card');
         cards.forEach(card => {
             card.addEventListener('mousemove', (e) => {
                 const rect = card.getBoundingClientRect();
-                
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
-
                 const centerX = rect.width / 2;
                 const centerY = rect.height / 2;
-
                 const rotateX = ((y - centerY) / centerY) * -15; 
                 const rotateY = ((x - centerX) / centerX) * 15;
-
                 card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
             });
-
             card.addEventListener('mouseleave', () => {
                 card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
             });
         });
     </script>
-    
+
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js')
-                    .then(registration => {
-                        console.log('ServiceWorker registered successfully');
-                    })
-                    .catch(err => {
-                        console.log('ServiceWorker registration failed: ', err);
-                    });
+                    .then(() => console.log('ServiceWorker registered'))
+                    .catch(err => console.log('ServiceWorker failed', err));
             });
         }
     </script>
-    
 </body>
 </html>
