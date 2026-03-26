@@ -11,39 +11,27 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alan's Universe</title>
+    <title>Alan | Portfolio</title>
     
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#030308">
     <link rel="apple-touch-icon" href="icon-192.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
 
     <style>
-        /* Base Reset & Custom Scrollbar */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            scrollbar-width: thin; 
-            scrollbar-color: rgba(255, 255, 255, 0.3) rgba(0, 0, 0, 0.1); 
-        }
-
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.1); }
-        ::-webkit-scrollbar-thumb { 
-            background: rgba(255, 255, 255, 0.3); 
-            border-radius: 10px; 
-        }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.5); }
+        /* Base Reset & Scrollbar */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); }
+        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
 
         html { background-color: #030308; }
 
         body {
-            min-height: 100vh;
             min-height: 100dvh; 
             font-family: 'Poppins', sans-serif;
-            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('rpgbackground.jpg');
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('Landing Page Background.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -53,43 +41,53 @@
             display: flex;
             flex-direction: column; 
             align-items: center;
-            justify-content: center;
-            padding: 2rem 1rem; 
+            justify-content: space-between; /* Pushes footer to bottom */
+            padding: 4rem 1rem 2rem 1rem; 
         }
 
-        /* --- Welcome Header --- */
+        /* --- Intro Section --- */
+        .intro { text-align: center; margin-bottom: 4rem; z-index: 10; }
+        
         .welcome-text {
-            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-size: clamp(3rem, 10vw, 5rem);
             font-weight: 700;
-            letter-spacing: -2px; 
-            margin-bottom: 3rem;
-            text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); 
-            text-align: center;
+            letter-spacing: -3px; 
+            line-height: 1;
+            margin-bottom: 0.5rem;
             opacity: 0;
-            transform: translateY(-30px);
-            animation: dropIn 0.8s ease-out forwards;
+            transform: translateY(-20px);
+            animation: fadeIn 0.8s ease-out forwards;
         }
 
-        /* --- Main Content (Cards) --- */
+        .bio-text {
+            font-size: 1.1rem;
+            font-weight: 300;
+            opacity: 0;
+            color: rgba(255, 255, 255, 0.7);
+            animation: fadeIn 0.8s ease-out 0.3s forwards;
+        }
+
+        /* --- Cards --- */
         .container {
             display: flex;
             gap: 2rem;
             width: 100%;
-            max-width: 1200px;
+            max-width: 1100px;
             justify-content: center;
             flex-wrap: wrap; 
             z-index: 10; 
+            margin-bottom: auto; /* Helps center vertically */
         }
 
         .card {
-            flex: 1 1 240px; 
-            max-width: 280px;
-            background: rgba(255, 255, 255, 0.08); 
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 16px;
-            padding: 2.5rem 1.5rem;
+            flex: 1 1 300px; 
+            max-width: 320px;
+            background: rgba(255, 255, 255, 0.05); 
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 3rem 2rem;
             text-decoration: none;
             color: #ffffff;
             display: flex;
@@ -97,108 +95,129 @@
             align-items: center;
             text-align: center;
             transform-style: preserve-3d;
-            transition: transform 0.1s ease-out, background 0.3s ease, box-shadow 0.3s ease;
-            will-change: transform; 
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
             opacity: 0;
         }
 
         .card:hover {
-            background: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        /* Category Tag */
+        .tag {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 4px 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            margin-bottom: 1.5rem;
+            color: rgba(255, 255, 255, 0.5);
         }
 
         .card i {
             font-size: 2.5rem;
-            margin-bottom: 1.25rem;
-            color: rgba(255, 255, 255, 0.9);
-            transition: transform 0.3s ease;
-            pointer-events: none; 
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 0%, #aaa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .card:hover i { transform: scale(1.15) translateZ(20px); color: #ffffff; }
-
         .card h2 {
-            font-size: 1.25rem;
+            font-size: 1.4rem;
             font-weight: 700;
             margin-bottom: 0.75rem;
-            text-transform: uppercase;
         }
 
         .card p {
-            font-size: 0.9rem;
-            opacity: 0.8;
-            line-height: 1.5;
+            font-size: 0.95rem;
+            opacity: 0.6;
+            line-height: 1.6;
         }
 
-        /* --- Animations --- */
-        @keyframes dropIn { to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideInLeft { from { opacity: 0; transform: translateX(-50px); } to { opacity: 1; transform: translateX(0); } }
-        @keyframes slideInRight { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: translateX(0); } }
+        /* --- Footer --- */
+        footer {
+            margin-top: 4rem;
+            font-size: 0.8rem;
+            opacity: 0.4;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+        
+        footer a { color: #fff; text-decoration: none; border-bottom: 1px solid transparent; transition: 0.3s; }
+        footer a:hover { border-bottom: 1px solid #fff; opacity: 1; }
 
-        .card:nth-child(odd) { animation: slideInLeft 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; animation-delay: 0.2s; }
-        .card:nth-child(even) { animation: slideInRight 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; animation-delay: 0.4s; }
+        /* --- Animations --- */
+        @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card { animation: slideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        .card:nth-child(1) { animation-delay: 0.4s; }
+        .card:nth-child(2) { animation-delay: 0.6s; }
+        .card:nth-child(3) { animation-delay: 0.8s; }
+
+        @media (max-width: 600px) {
+            body { padding-top: 2rem; }
+            .welcome-text { margin-bottom: 1rem; }
+        }
     </style>
 </head>
 <body>
 
-    <h1 class="welcome-text">Welcome.</h1>
+    <div class="intro">
+        <h1 class="welcome-text">Welcome.</h1>
+        <p class="bio-text">I'm Alan, building smart tools for the curious.</p>
+    </div>
 
     <div class="container">
-        <a href="https://alankhoocl.github.io/Upcoming-Trip/" class="card" onclick="trackClick('You Be Tripping')">
+        <a href="https://alankhoocl.github.io/Upcoming-Trip/" class="card" onclick="trackClick('Upcoming Trip')">
+            <span class="tag">Travel</span>
             <i class="fa-solid fa-plane-departure"></i>
             <h2>You Be Tripping</h2>
-            <p>Interactive itinerary visualizer for the next adventure.</p>
+            <p>A visual itinerary architect for your next global escape.</p>
         </a>
         
-        <a href="https://howkhooisthis.com" class="card" onclick="trackClick('Split Me The Money')">
+        <a href="https://howkhooisthis.com" class="card" onclick="trackClick('Split Money')">
+            <span class="tag">Finance</span>
             <i class="fa-solid fa-wallet"></i>
             <h2>Split Me The Money</h2>
-            <p>Fuss free group expenses simplifier.</p>
+            <p>Eliminate the awkwardness. Group expenses, simplified.</p>
         </a>
         
-        <a href="https://alankhoocl.github.io/aethelgard-rpg/" class="card" onclick="trackClick('A.L.A.N')">
+        <a href="https://alankhoocl.github.io/aethelgard-rpg/" class="card" onclick="trackClick('ALAN RPG')">
+            <span class="tag">EdTech</span>
             <i class="fa-solid fa-gamepad"></i>
             <h2>A.L.A.N</h2>
-            <p>Level up while learning.</p>
+            <p>Gamifying the path to knowledge. Level up your learning.</p>
         </a>      
     </div> 
 
-    <script>
-        function trackClick(projectName) {
-            gtag('event', 'select_content', {
-                'content_type': 'project_card',
-                'item_id': projectName
-            });
-        }
-    </script>
+    <footer>
+        &copy; 2026 Crafted in the stars by <a href="https://github.com/alankhoocl" target="_blank">Alan</a>
+    </footer>
 
     <script>
+        function trackClick(pName) { gtag('event', 'select_content', {'item_id': pName}); }
+
         const cards = document.querySelectorAll('.card');
         cards.forEach(card => {
             card.addEventListener('mousemove', (e) => {
                 const rect = card.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                const rotateX = ((y - centerY) / centerY) * -15; 
-                const rotateY = ((x - centerX) / centerX) * 15;
-                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
+                const rx = ((y - (rect.height / 2)) / (rect.height / 2)) * -10; 
+                const ry = ((x - (rect.width / 2)) / (rect.width / 2)) * 10;
+                card.style.transform = `perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) scale3d(1.02, 1.02, 1.02)`;
             });
             card.addEventListener('mouseleave', () => {
-                card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+                card.style.transform = `perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)`;
             });
         });
-    </script>
 
-    <script>
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(() => console.log('ServiceWorker registered'))
-                    .catch(err => console.log('ServiceWorker failed', err));
-            });
+            window.addEventListener('load', () => { navigator.serviceWorker.register('./sw.js'); });
         }
     </script>
 </body>
