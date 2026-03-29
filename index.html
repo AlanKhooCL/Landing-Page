@@ -1,1446 +1,218 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GRL4KGPP7W"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-GRL4KGPP7W');
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Trip Planner Pro — Beyond Journey's End</title>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Alan | Portfolio</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#030308">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
 
     <style>
-        :root {
-            --ink: #1a1a2e;
-            --paper: #faf8f4;
-            --accent: #c9773a;
-            --accent-light: #f0e0cd;
-            --muted: #8a8070;
-            --border: #e8e2d9;
-            --white: #ffffff;
-            
-            --success: #10b981;
-            --danger: #ef4444;
-        }
+        /* Base Reset & Scrollbar */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); }
+        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
 
-        * { box-sizing: border-box; }
+        html { background-color: #030308; }
 
         body {
-            font-family: 'DM Sans', sans-serif;
-            background: var(--paper);
-            color: var(--ink);
-            min-height: 100vh;
-            overflow-x: hidden;
+            min-height: 100dvh; 
+            font-family: 'Poppins', sans-serif;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('Landing Page Background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            overflow-x: hidden; 
+            color: #ffffff;
+            display: flex;
+            flex-direction: column; 
+            align-items: center;
+            justify-content: space-between; /* Pushes footer to bottom */
+            padding: 4rem 1rem 2rem 1rem; 
         }
 
-        h1, h2, h3, .serif { font-family: 'Cinzel', serif; }
-
-        /* ---- TOAST ---- */
-        #toast-container {
-            position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
-            z-index: 9999; display: flex; flex-direction: column; gap: 8px; align-items: center;
-            pointer-events: none;
-        }
-        .toast {
-            padding: 10px 20px; border-radius: 100px; font-size: 0.85rem; font-weight: 600;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15); pointer-events: auto;
-            animation: toastIn 0.3s ease forwards;
-            display: flex; align-items: center; gap: 8px;
-            font-family: 'DM Sans', sans-serif;
-        }
-        .toast.success { background: #1a1a2e; color: #fff; }
-        .toast.error   { background: #b91c1c; color: #fff; }
-        .toast.info    { background: #c9773a; color: #fff; }
-        .toast.warning { background: #92400e; color: #fff; }
-        @keyframes toastIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes toastOut { from { opacity: 1; } to { opacity: 0; transform: translateY(10px); } }
-
-        /* ============================================================
-           FRIERENCRAFT THEMED LANDING PAGE 
-           ============================================================ */
-        #ai-overlay {
-            position: fixed; inset: 0;
-            background: linear-gradient(160deg, #060a10 0%, #0e1a2a 40%, #0a1520 70%, #060e18 100%);
-            z-index: 100; display: flex; flex-direction: column; align-items: center; 
-            justify-content: flex-start; padding: 20px; overflow-y: auto; overflow-x: hidden;
-            font-family: 'Crimson Pro', serif; color: #c8d8e8; transition: opacity 1.5s ease;
-        }
-
-        .overlay-scroll-wrapper {
-            position: relative; z-index: 1; width: 100%; max-width: 540px; margin: auto; 
-            display: flex; flex-direction: column; align-items: center; padding: 40px 0;
-        }
-
-        #title-canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
-
-        .frieren-rune { font-size: 1.4rem; color: #3a6070; letter-spacing: 1.5em; margin-left: 1.5em; z-index: 1; }
-
-        .frieren-logo {
-            font-family: 'Cinzel', serif; font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 600;
-            letter-spacing: 0.15em; background: linear-gradient(135deg, #a8c4d8 0%, #7eb8d4 30%, #c8e0f0 60%, #8ab8cc 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-            filter: drop-shadow(0 0 40px rgba(150,210,240,0.3)); animation: titleGlow 3s ease-in-out infinite alternate;
-            z-index: 1; text-align: center; line-height: 1.1;
-        }
-
-        @keyframes titleGlow {
-            from { filter: drop-shadow(0 0 20px rgba(150,210,240,0.2)); }
-            to   { filter: drop-shadow(0 0 60px rgba(150,210,240,0.5)); }
-        }
-
-        .frieren-subtitle { font-style: italic; font-size: 1.1rem; color: #6a90a8; letter-spacing: 0.3em; font-weight: 300; z-index: 1; text-align: center; }
-        .frieren-quote { font-style: italic; color: #3a5870; font-size: 0.95rem; text-align: center; max-width: 380px; line-height: 1.7; z-index: 1; margin-bottom: 8px; }
-
-        /* THE CROSSROADS - SIGNPOST UI */
-        .signpost-wrapper {
-            position: relative; display: flex; flex-direction: column; align-items: center; 
-            margin-top: 3rem; z-index: 10; width: 100%;
-        }
-        .signpost-pole {
-            width: 14px; height: 100%; min-height: 220px;
-            background: linear-gradient(90deg, #2c1a12, #4a3022, #2c1a12);
-            position: absolute; top: -10px; z-index: 0; border-radius: 8px 8px 0 0;
-            box-shadow: inset -2px 0 5px rgba(0,0,0,0.6);
-        }
-        .signpost-signs {
-            display: flex; flex-direction: column; gap: 24px; width: 100%; max-width: 300px;
-            z-index: 1; position: relative; padding: 20px 0;
-        }
-        .sign-btn {
-            position: relative; width: 100%; background: linear-gradient(180deg, #4a3022, #382216);
-            border: 2px solid #1a0f0a; color: #e0d4c8; font-family: 'Cinzel', serif; font-size: 1.05rem;
-            font-weight: 700; letter-spacing: 0.1em; padding: 18px 20px; cursor: pointer;
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), filter 0.3s ease;
-            display: flex; align-items: center; justify-content: center; gap: 12px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.6), inset 0 2px 4px rgba(255,255,255,0.08);
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.9);
-        }
-        .sign-btn::after { /* The Iron Nail */
-            content: ''; position: absolute; width: 10px; height: 10px; background: #1a0f0a;
-            border-radius: 50%; top: 50%; transform: translateY(-50%); box-shadow: inset 1px 1px 2px rgba(255,255,255,0.2);
-        }
-        .sign-left {
-            clip-path: polygon(24px 0%, 100% 0%, 100% 100%, 24px 100%, 0% 50%);
-            padding-left: 36px; transform: rotate(-3deg);
-        }
-        .sign-left::after { right: 24px; }
-        .sign-left:hover { transform: rotate(-3deg) scale(1.05); filter: brightness(1.25); }
+        /* --- Intro Section --- */
+        .intro { text-align: center; margin-bottom: 4rem; z-index: 10; }
         
-        .sign-right {
-            clip-path: polygon(0% 0%, calc(100% - 24px) 0%, 100% 50%, calc(100% - 24px) 100%, 0% 100%);
-            padding-right: 36px; transform: rotate(3deg);
-        }
-        .sign-right::after { left: 24px; }
-        .sign-right:hover { transform: rotate(3deg) scale(1.05); filter: brightness(1.25); }
-
-        .landing-card {
-            width: 100%; background: rgba(10, 18, 28, 0.65); border: 1px solid rgba(100, 160, 200, 0.2);
-            border-radius: 4px; backdrop-filter: blur(12px); box-shadow: 0 10px 40px rgba(0,0,0,0.6), inset 0 0 20px rgba(100,160,200,0.03);
-            padding: 36px; position: relative; z-index: 1; display: none; /* Hidden by default */
+        .welcome-text {
+            font-size: clamp(3rem, 10vw, 5rem);
+            font-weight: 700;
+            letter-spacing: -3px; 
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: fadeIn 0.8s ease-out forwards;
         }
 
-        .landing-card .field-label {
-            font-size: 0.65rem; font-weight: 600; letter-spacing: 0.15em;
-            text-transform: uppercase; color: #6a90a8; margin-bottom: 6px; display: block; font-family: 'Cinzel', serif;
+        .bio-text {
+            font-size: 1.1rem;
+            font-weight: 300;
+            opacity: 0;
+            color: rgba(255, 255, 255, 0.7);
+            animation: fadeIn 0.8s ease-out 0.3s forwards;
         }
 
-        .landing-card .field-input {
-            width: 100%; border: 1px solid rgba(100,160,200,0.3); border-radius: 2px;
-            padding: 11px 14px; font-size: 1rem; font-family: 'Crimson Pro', serif;
-            color: #c8d8e8; background: rgba(0,0,0,0.4); transition: all 0.3s; outline: none;
+        /* --- Cards --- */
+        .container {
+            display: flex;
+            gap: 2rem;
+            width: 100%;
+            max-width: 1100px;
+            justify-content: center;
+            flex-wrap: wrap; 
+            z-index: 10; 
+            margin-bottom: auto; /* Helps center vertically */
         }
-        .landing-card .field-input:focus { border-color: #7ab8d0; box-shadow: 0 0 15px rgba(100,180,220,0.15); background: rgba(0,0,0,0.6); }
-        .landing-card .field-input::placeholder { color: #3a5870; font-style: italic; }
-        .landing-card textarea.field-input { resize: none; }
 
-        .landing-card .glass-panel {
-            background: rgba(0,0,0,0.2); border: 1px solid rgba(100,160,200,0.15); border-radius: 4px; margin-bottom: 16px; padding: 16px;
+        .card {
+            flex: 1 1 300px; 
+            max-width: 320px;
+            background: rgba(255, 255, 255, 0.05); 
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 3rem 2rem;
+            text-decoration: none;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transform-style: preserve-3d;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            opacity: 0;
         }
-        .landing-card .model-chip-group { display: flex; flex-wrap: wrap; gap: 8px; }
-        .landing-card .model-chip {
-            background: rgba(10,18,28,0.8); border: 1px solid rgba(100,160,200,0.2); border-radius: 2px;
-            padding: 8px 12px; font-size: 0.65rem; font-weight: 600; color: #5a7888;
-            cursor: pointer; transition: all 0.3s; font-family: 'Cinzel', serif; letter-spacing: 0.05em; flex-grow: 1; text-align: center;
-        }
-        .landing-card .model-chip:hover { border-color: #7ab8d0; color: #8ab8cc; background: rgba(100,180,220,0.1); }
-        .landing-card .model-chip.active { background: rgba(100,180,220,0.15); color: #c8e8f8; border-color: #7ab8d0; box-shadow: inset 0 0 15px rgba(100,180,220,0.1); }
 
-        .landing-card .btn-primary, .landing-card .btn-secondary {
-            width: 100%; background: transparent; border: 1px solid #4a7090; color: #8ab8cc;
-            font-family: 'Cinzel', serif; font-size: 0.9rem; letter-spacing: 0.25em; border-radius: 2px;
-            padding: 13px; cursor: pointer; transition: all 0.4s ease; position: relative; overflow: hidden;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
+        .card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
-        .landing-card .btn-secondary { padding: 11px 20px; }
-        
-        .landing-card .btn-primary::before, .landing-card .btn-secondary::before {
-            content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(100,180,220,0.1), transparent);
-            transform: translateX(-100%); transition: transform 0.5s ease;
+
+        /* Category Tag */
+        .tag {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 4px 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            margin-bottom: 1.5rem;
+            color: rgba(255, 255, 255, 0.5);
         }
-        .landing-card .btn-primary:hover:not(:disabled), .landing-card .btn-secondary:hover:not(:disabled) {
-            border-color: #7ab8d0; color: #c8e8f8; box-shadow: 0 0 30px rgba(100,180,220,0.2); background: rgba(100,180,220,0.05);
+
+        .card i {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 0%, #aaa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        .landing-card .btn-primary:hover:not(:disabled)::before, .landing-card .btn-secondary:hover:not(:disabled)::before { transform: translateX(100%); }
-        .landing-card .btn-primary:disabled, .landing-card .btn-secondary:disabled { opacity: 0.4; cursor: not-allowed; border-color: #2a4050; color: #3a5870; }
 
-        .landing-card .divider { display: flex; align-items: center; gap: 12px; margin: 24px 0; }
-        .landing-card .divider::before, .landing-card .divider::after { content: ''; flex: 1; height: 1px; background: rgba(100,160,200,0.2); }
-        .landing-card .divider span { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: #4a6878; font-family: 'Cinzel', serif; }
-
-        .landing-card .select-input {
-            flex: 1; border: 1px solid rgba(100,160,200,0.3); border-radius: 2px; padding: 11px 14px; font-size: 1rem; font-family: 'Crimson Pro', serif;
-            color: #c8d8e8; background: rgba(0,0,0,0.4); outline: none; transition: all 0.3s; cursor: pointer;
+        .card h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
         }
-        .landing-card .select-input:focus { border-color: #7ab8d0; box-shadow: 0 0 15px rgba(100,180,220,0.15); background: rgba(0,0,0,0.6); }
-        .landing-card .select-input:disabled { opacity: 0.5; }
-        .landing-card .select-input option { background: #060a10; color: #c8d8e8; }
 
-        .back-to-paths {
-            position: absolute; top: -40px; left: 0; color: #6a90a8; cursor: pointer; display: flex; align-items: center; gap: 6px;
-            font-size: 0.8rem; font-family: 'Cinzel', serif; letter-spacing: 0.1em; text-decoration: none; border: none; background: none;
+        .card p {
+            font-size: 0.95rem;
+            opacity: 0.6;
+            line-height: 1.6;
         }
-        .back-to-paths:hover { color: #8ab8cc; }
 
-        .load-row { display: flex; gap: 10px; }
-        .input-group { display: flex; gap: 12px; margin-bottom: 12px; }
-
-        /* Mystical Loading Spinner */
-        .loading-wrap { display: none; flex-direction: column; align-items: center; gap: 12px; margin-top: 28px; z-index: 10; }
-        .loading-wrap.show { display: flex; }
-        .spinner { width: 32px; height: 32px; border: 2px solid rgba(100,180,220,0.2); border-top-color: #8ab8cc; border-radius: 50%; animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite; box-shadow: 0 0 20px rgba(100,180,220,0.2); }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .loading-msg { font-size: 0.95rem; color: #8ab8cc; font-family: 'Crimson Pro', serif; font-style: italic; letter-spacing: 0.05em; text-align: center; }
-
-        /* ============================================================
-           STANDARD APP STYLING (Shared between Planner & Ledger)
-           ============================================================ */
-        
-        .field-input {
-            width: 100%; border: 1.5px solid var(--border); border-radius: 12px;
-            padding: 11px 14px; font-size: 0.9rem; font-family: 'DM Sans', sans-serif;
-            color: var(--ink); background: var(--paper); transition: border-color 0.2s, box-shadow 0.2s; outline: none; margin-bottom: 12px;
-        }
-        .field-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(201,119,58,0.12); background: var(--white); }
-        .select-input-light { 
-            width: 100%; border: 1.5px solid var(--border); border-radius: 12px; padding: 11px 14px; font-size: 0.9rem; font-family: 'DM Sans', sans-serif;
-            color: var(--ink); background: var(--paper); outline: none; margin-bottom: 12px;
+        /* --- Footer --- */
+        footer {
+            margin-top: 4rem;
+            font-size: 0.8rem;
+            opacity: 0.4;
+            text-align: center;
+            letter-spacing: 1px;
         }
         
-        .btn-primary {
-            width: 100%; background: var(--ink); color: var(--white); border: none; border-radius: 12px; padding: 13px;
-            font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: background 0.2s, transform 0.1s;
-            display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 12px;
-        }
-        .btn-primary:hover:not(:disabled) { background: #2d2d4e; }
-        .btn-primary:active:not(:disabled) { transform: scale(0.98); }
+        footer a { color: #fff; text-decoration: none; border-bottom: 1px solid transparent; transition: 0.3s; }
+        footer a:hover { border-bottom: 1px solid #fff; opacity: 1; }
 
-        .btn-secondary {
-            background: var(--accent-light); color: var(--accent); border: none; border-radius: 12px; padding: 11px 20px;
-            font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: background 0.2s;
-            display: flex; align-items: center; justify-content: center; gap: 8px; white-space: nowrap; margin-bottom: 12px;
-        }
-        .btn-secondary:hover:not(:disabled) { background: #e8d0b8; }
+        /* --- Animations --- */
+        @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* ---- HEADER ---- */
-        #main-header { background: var(--white); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 40; display: none; }
-        .header-inner { max-width: 900px; margin: 0 auto; padding: 16px 20px; }
-        .header-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
-        .header-title { font-family: 'Cinzel', serif; font-size: 1.6rem; font-weight: 900; color: var(--ink); line-height: 1.2; }
-        .header-meta { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 4px; }
-        .meta-chip { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; color: var(--muted); font-weight: 500; }
-        .header-actions { display: flex; gap: 8px; flex-shrink: 0; }
+        .card { animation: slideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        .card:nth-child(1) { animation-delay: 0.4s; }
+        .card:nth-child(2) { animation-delay: 0.6s; }
+        .card:nth-child(3) { animation-delay: 0.8s; }
 
-        .icon-btn {
-            background: var(--paper); border: 1.5px solid var(--border); border-radius: 10px; padding: 8px 12px; cursor: pointer; font-size: 0.8rem; font-weight: 600; color: var(--ink);
-            display: flex; align-items: center; gap: 6px; transition: all 0.15s; font-family: 'DM Sans', sans-serif;
-        }
-        .icon-btn:hover { background: var(--border); }
-        .icon-btn.accent { background: var(--accent-light); border-color: transparent; color: var(--accent); }
-        .icon-btn.accent:hover { background: #e8d0b8; }
-        .icon-btn.danger { background: #fef2f2; border-color: transparent; color: #dc2626; }
-        .icon-btn.danger:hover { background: #fee2e2; }
-
-        /* ---- FILTER NAV (Planner) ---- */
-        #filter-nav { display: flex; overflow-x: auto; gap: 8px; margin-top: 14px; padding-bottom: 2px; }
-        #filter-nav::-webkit-scrollbar { display: none; }
-        .filter-btn {
-            padding: 7px 16px; border-radius: 100px; font-size: 0.8rem; font-weight: 600; border: 1.5px solid var(--border); cursor: pointer; white-space: nowrap;
-            display: flex; align-items: center; gap: 6px; transition: all 0.15s; background: var(--white); color: var(--ink); font-family: 'DM Sans', sans-serif;
-        }
-        .filter-btn.active { background: var(--ink); color: var(--white); border-color: var(--ink); }
-
-        /* ---- MAIN CONTENT WRAPPERS ---- */
-        .app-view-container { max-width: 900px; margin: 0 auto; padding: 28px 20px 80px; display: none; }
-        #ledger-view { max-width: 600px; } 
-
-        /* ---- SHARED CARD STYLE ---- */
-        .day-card {
-            background: var(--white); border: 1.5px solid var(--border);
-            border-radius: 20px; overflow: hidden; margin-bottom: 20px;
-            transition: box-shadow 0.2s; padding: 20px;
-        }
-        .day-card:hover { box-shadow: 0 4px 24px rgba(26,26,46,0.07); }
-        .section-title { font-family: 'Cinzel', serif; font-size: 1.2rem; font-weight: 700; color: var(--ink); display: flex; align-items: center; gap: 10px; margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
-
-        /* ---- PLANNER BUDGET CARDS ---- */
-        .budget-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-bottom: 28px; }
-        .budget-card { background: var(--white); border: 1.5px solid var(--border); border-radius: 16px; padding: 16px; display: flex; align-items: center; gap: 12px; transition: border-color 0.2s; }
-        .budget-card:hover { border-color: var(--accent); }
-        .budget-icon { background: var(--paper); border: 1.5px solid var(--border); border-radius: 10px; padding: 8px; color: var(--muted); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .budget-label { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-bottom: 2px; }
-        .budget-amount-wrap { display: flex; align-items: center; }
-        .budget-currency { font-size: 0.8rem; font-weight: 600; color: var(--muted); margin-right: 2px; }
-        .budget-amount-input { border: none; outline: none; background: transparent; font-size: 1.05rem; font-weight: 700; color: var(--ink); width: 100%; font-family: 'DM Sans', sans-serif; padding: 0; }
-        .budget-amount-input:focus { color: var(--accent); }
-
-        /* ---- PLANNER SUMMARY ---- */
-        .expense-summary { background: var(--white); border: 1.5px solid var(--border); border-radius: 20px; padding: 20px; margin-bottom: 28px; }
-        .expense-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
-        .expense-total { font-family: 'Cinzel', serif; font-size: 1.8rem; font-weight: 900; color: var(--ink); }
-        .expense-currency { font-size: 0.85rem; font-weight: 400; color: var(--muted); margin-left: 4px; font-family: 'DM Sans', sans-serif; }
-        .progress-bar-track { background: var(--paper); border-radius: 100px; height: 6px; margin: 12px 0; overflow: hidden; }
-        .progress-bar-fill { height: 100%; background: var(--accent); border-radius: 100px; transition: width 0.6s ease; }
-        .loc-breakdown { border-top: 1px solid var(--border); padding-top: 12px; display: flex; flex-direction: column; gap: 6px; }
-        .loc-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; }
-        .loc-name { font-weight: 600; display: flex; align-items: center; gap: 6px; }
-        .loc-amount { font-weight: 700; color: var(--ink); }
-        .zeroise-btn { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; background: var(--paper); border: 1px solid var(--border); border-radius: 8px; padding: 4px 10px; cursor: pointer; color: var(--muted); transition: all 0.15s; font-family: 'DM Sans', sans-serif; }
-        .zeroise-btn:hover { background: #fee2e2; border-color: #fca5a5; color: #dc2626; }
-
-        /* ---- PLANNER HERO ---- */
-        .loc-hero { width: 100%; height: 220px; border-radius: 20px; overflow: hidden; margin-bottom: 28px; position: relative; }
-        .loc-hero img { width: 100%; height: 100%; object-fit: cover; }
-        .loc-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 60%); display: flex; align-items: flex-end; padding: 24px; }
-        .loc-hero-name { font-family: 'Cinzel', serif; font-size: 2rem; font-weight: 900; color: #fff; }
-
-        /* ---- PLANNER TIMELINE ---- */
-        .day-header { padding: 0 0 16px 0; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
-        .day-label { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 2px; }
-        .day-title { font-family: 'Cinzel', serif; font-size: 1.15rem; font-weight: 700; color: var(--ink); }
-        .day-chips { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-        .day-expense-chip { font-size: 0.8rem; font-weight: 700; background: var(--paper); border: 1px solid var(--border); border-radius: 100px; padding: 4px 12px; color: var(--ink); }
-        .map-toggle { font-size: 0.75rem; font-weight: 600; border: 1px solid var(--border); border-radius: 100px; padding: 4px 12px; cursor: pointer; background: var(--white); color: var(--muted); transition: all 0.15s; display: flex; align-items: center; gap: 5px; font-family: 'DM Sans', sans-serif; }
-        .map-toggle:hover { background: var(--paper); color: var(--ink); }
-        .map-toggle.open { background: var(--ink); color: var(--white); border-color: var(--ink); }
-        .map-container { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; margin: 0 -20px; }
-        .map-container.open { max-height: 360px; margin-bottom: 16px; margin-top: 16px;}
-        .day-map { height: 280px; width: 100%; border-radius: 0; }
-        .events-wrap { padding-top: 20px; }
-        .timeline-rail { border-left: 2px solid var(--border); margin-left: 10px; padding-left: 0; display: flex; flex-direction: column; gap: 24px; }
-        .event-item { position: relative; padding-left: 28px; }
-        .event-dot { position: absolute; left: -11px; top: 3px; width: 20px; height: 20px; border-radius: 50%; background: var(--white); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; transition: border-color 0.2s; }
-        .event-dot svg { width: 9px; height: 9px; }
-        .event-row { display: flex; align-items: flex-start; gap: 12px; }
-        .event-time { font-size: 0.75rem; font-weight: 600; color: var(--muted); min-width: 64px; padding-top: 3px; white-space: nowrap; }
-        .event-body { flex: 1; }
-        .event-name { font-size: 0.95rem; font-weight: 500; color: var(--ink); line-height: 1.4; }
-        .event-name a { color: var(--accent); text-decoration: none; }
-        .event-name a:hover { text-decoration: underline; }
-        .expense-input-wrap { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
-        .expense-currency-label { font-size: 0.75rem; font-weight: 600; color: var(--muted); }
-        .expense-field { width: 72px; border: 1.5px solid var(--border); border-radius: 8px; padding: 4px 6px; font-size: 0.8rem; text-align: right; outline: none; background: var(--paper); color: var(--ink); font-family: 'DM Sans', sans-serif; font-weight: 600; transition: border-color 0.2s; }
-        .expense-field:focus { border-color: var(--accent); background: var(--white); box-shadow: 0 0 0 2px rgba(201,119,58,0.1); }
-
-        /* ---- LEDGER APP SPECIFIC ---- */
-        .ledger-summary-title { font-size: 0.85rem; color: var(--muted); margin-bottom: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; font-family: 'DM Sans', sans-serif;}
-        .empty-state-main { text-align: center; padding: 40px 20px; color: var(--muted); border: 1px dashed var(--border); border-radius: 12px; margin-bottom: 20px; background: var(--paper);}
-        
-        .ledger-ul { list-style-type: none; padding: 0; margin: 0; }
-        .ledger-li { padding: 16px 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;}
-        .ledger-li:last-child { border-bottom: none; padding-bottom: 0; }
-        
-        .settlement-amount { font-weight: 600; color: var(--ink); background: var(--paper); padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border); font-variant-numeric: tabular-nums;}
-        .settle-action-btn { background-color: var(--success); color: white; border: none; padding: 8px 16px; font-size: 0.85rem; border-radius: 6px; box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2); cursor: pointer; font-family: 'DM Sans', sans-serif; font-weight: 600;}
-        .settle-action-btn:hover { background-color: #059669; }
-
-        .checkbox-group { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 10px 0 20px 0; padding: 16px; background: var(--paper); border-radius: 8px; border: 1px solid var(--border); }
-        .checkbox-group label { display: flex; align-items: center; cursor: pointer; color: var(--ink); font-weight: 500; font-size: 0.95rem;}
-        .checkbox-group input { width: auto; margin: 0 10px 0 0; accent-color: var(--accent); transform: scale(1.1); }
-
-        .chart-container { position: relative; height: 220px; width: 100%; margin-bottom: 10px; overflow: visible; }
-        @keyframes panicShake {
-            0% { transform: translate(0, 0); }
-            25% { transform: translate(var(--shake-intensity), calc(var(--shake-intensity) * -0.5)); }
-            50% { transform: translate(calc(var(--shake-intensity) * -1), var(--shake-intensity)); }
-            75% { transform: translate(calc(var(--shake-intensity) * 0.5), calc(var(--shake-intensity) * -1)); }
-            100% { transform: translate(0, 0); }
-        }
-        .vibrating-chart { animation-name: panicShake; animation-iteration-count: infinite; animation-timing-function: linear; will-change: transform; }
-
-        /* ---- MODALS ---- */
-        .fixed-modal { position: fixed; inset: 0; background: rgba(26,26,46,0.5); z-index: 110; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px); }
-        .fixed-modal.show { display: flex; }
-        .modal-card { background: var(--white); width: 100%; max-width: 480px; border-radius: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); padding: 28px; position: relative; }
-        .modal-close { position: absolute; top: 16px; right: 16px; background: var(--paper); border: 1.5px solid var(--border); border-radius: 8px; width: 32px; height: 32px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--muted); transition: all 0.15s; }
-        .modal-close:hover { background: var(--border); color: var(--ink); }
-        .modal-title { font-family: 'Cinzel', serif; font-size: 1.25rem; font-weight: 700; margin-bottom: 4px; }
-        .modal-subtitle { font-size: 0.82rem; color: var(--muted); margin-bottom: 16px; line-height: 1.5; }
-        
-        .delete-confirm-wrap { display: flex; gap: 8px; }
-        .confirm-yes { background: var(--danger); color: #fff; border: none; border-radius: 8px; padding: 8px 14px; font-weight: 700; font-size: 0.82rem; cursor: pointer; font-family: 'DM Sans', sans-serif; }
-        .confirm-no { background: var(--paper); border: 1.5px solid var(--border); border-radius: 8px; padding: 8px 14px; font-weight: 600; font-size: 0.82rem; cursor: pointer; color: var(--ink); font-family: 'DM Sans', sans-serif; }
-
-        /* ---- PETALS ---- */
-        @keyframes fall { 0% { transform: translate3d(0, -10vh, 0) rotate(0deg); opacity: 0; } 10% { opacity: 0.6; } 90% { opacity: 0.6; } 100% { transform: translate3d(15vw, 110vh, 0) rotate(360deg); opacity: 0; } }
-        .petal { position: absolute; background: linear-gradient(135deg, #f4c2a1, #e8956a); border-radius: 12px 0 12px 0; animation: fall linear infinite; pointer-events: none; }
-        #blossom-container { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 50; }
-
-        /* ---- SAVE INDICATOR ---- */
-        #save-indicator {
-            position: fixed; bottom: 24px; left: 50%; z-index: 9999;
-            background: var(--white); border: 1.5px solid var(--border);
-            border-radius: 100px; padding: 8px 16px;
-            font-size: 0.78rem; font-weight: 600; color: var(--muted);
-            display: flex; align-items: center; gap: 6px;
-            opacity: 0; visibility: hidden; transform: translateX(-50%) translateY(20px); 
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        #save-indicator.show { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
-        #save-indicator.error { color: #dc2626; border-color: #fca5a5; }
-
-        /* ---- RESPONSIVE MOBILE FIXES ---- */
         @media (max-width: 600px) {
-            .landing-card { padding: 24px 20px; }
-            .header-title { font-size: 1.2rem; }
-            .expense-total { font-size: 1.4rem; }
-            .load-row { flex-direction: column; }
-            .load-row .btn-secondary { width: 100%; padding: 13px; }
-            .budget-grid { grid-template-columns: 1fr; } 
-            .event-row { gap: 8px; }
-            .expense-field { width: 64px; }
-            .frieren-logo { font-size: 2.2rem; }
-            .frieren-quote { font-size: 0.85rem; padding: 0 10px; }
-            .checkbox-group { grid-template-columns: 1fr; }
+            body { padding-top: 2rem; }
+            .welcome-text { margin-bottom: 1rem; }
         }
     </style>
 </head>
 <body>
 
-<div id="toast-container"></div>
-
-<div id="save-indicator">
-    <i data-lucide="cloud" style="width:14px;height:14px;"></i>
-    <span id="save-indicator-text">Saving...</span>
-</div>
-
-<div id="blossom-container"></div>
-
-<div id="ai-overlay">
-    <canvas id="title-canvas"></canvas>
-
-    <div class="overlay-scroll-wrapper">
-        <div style="z-index:1; display:flex; flex-direction:column; align-items:center; gap:0.5rem; margin-top:10px;">
-            <div class="frieren-rune">✦ ✦ ✦</div>
-            <div class="frieren-logo">Journeys & Ledgers</div>
-            <div class="frieren-subtitle">beyond journey's end</div>
-            <div style="height:1px; width:200px; background:linear-gradient(90deg,transparent,#2a5060,transparent); margin:0.5rem 0;"></div>
-            <p class="frieren-quote">"A thousand years from now, someone will remember this moment."</p>
-        </div>
-
-        <div id="landing-paths-container" class="signpost-wrapper">
-            <div class="signpost-pole"></div>
-            <div class="signpost-signs">
-                <button class="sign-btn sign-left" onclick="showPlannerPortal()">
-                    <i data-lucide="map" style="width:20px; height:20px; color:#d7ccc8;"></i> The Planner's Grimoire
-                </button>
-                <button class="sign-btn sign-right" onclick="showLedgerPortal()">
-                    <i data-lucide="scale" style="width:20px; height:20px; color:#d7ccc8;"></i> The Debt Ledger
-                </button>
-            </div>
-        </div>
-
-        <div id="planner-portal" class="landing-card" style="margin-top: 1.5rem;">
-            <button class="back-to-paths" onclick="backToPaths()"><i data-lucide="chevron-left" style="width:16px;height:16px;"></i> Back</button>
-            
-            <div style="margin-bottom:24px;">
-                <p class="field-label">Open Grimoire (Saved Trips)</p>
-                <div class="load-row">
-                    <select id="saved-trips-dropdown" class="select-input" disabled>
-                        <option value="">Fetching past memories…</option>
-                    </select>
-                    <button id="load-btn" onclick="loadPastTrip()" class="btn-secondary" disabled>
-                        <i data-lucide="book-open" style="width:15px;height:15px;"></i> OPEN
-                    </button>
-                </div>
-                <div id="trips-status" style="margin-top:6px;"></div>
-            </div>
-
-            <div class="divider"><span>or</span></div>
-
-            <div>
-                <p class="field-label">Craft New Journey</p>
-                <div style="display:flex;gap:12px;margin-bottom:12px;">
-                    <div style="flex:1;">
-                        <label class="field-label" style="font-size: 0.55rem; opacity: 0.8;">Date Range</label>
-                        <input type="text" id="trip-dates" placeholder="Oct 1 – Oct 10" class="field-input">
-                    </div>
-                    <div style="width:90px;">
-                        <label class="field-label" style="font-size: 0.55rem; opacity: 0.8;">Pax</label>
-                        <input type="number" id="trip-pax" placeholder="2" min="1" class="field-input">
-                    </div>
-                </div>
-
-                <div style="margin-bottom:16px;">
-                    <label class="field-label" style="font-size: 0.55rem; opacity: 0.8;">Your Trip Idea</label>
-                    <textarea id="trip-prompt" class="field-input" style="height:90px;" placeholder="A foodie trip to Penang focusing on hawker centres..."></textarea>
-                </div>
-
-                <div class="glass-panel">
-                    <p class="field-label" style="font-size: 0.55rem; opacity: 0.8; margin-bottom: 8px;">> Select Magic Engine:</p>
-                    <div class="model-chip-group">
-                        <button type="button" class="model-chip" data-value="gemini-2.0-flash">2.0 FLASH</button>
-                        <button type="button" class="model-chip" data-value="gemini-2.5-flash">2.5 FLASH</button>
-                        <button type="button" class="model-chip" data-value="gemini-2.5-pro">2.5 PRO</button>
-                        <button type="button" class="model-chip active" data-value="gemini-3-flash-preview">3 FLASH (NEXT)</button>
-                    </div>
-                    <input type="hidden" id="modelSelect" value="gemini-3-flash-preview">
-                </div>
-
-                <button id="generate-btn" onclick="generateTrip()" class="btn-primary">
-                    <i data-lucide="sparkles" style="width:16px;height:16px;"></i> BEGIN JOURNEY
-                </button>
-            </div>
-        </div>
-
-        <div id="ledger-portal" class="landing-card" style="margin-top: 1.5rem;">
-            <button class="back-to-paths" onclick="backToPaths()"><i data-lucide="chevron-left" style="width:16px;height:16px;"></i> Back</button>
-            
-            <div style="margin-bottom:24px;">
-                <p class="field-label">Open Ledger</p>
-                <div id="ledgerLoadingMsg" style="color:#8ab8cc; font-size:0.8rem; font-style:italic;">Fetching ledgers...</div>
-                <div id="ledgerList" style="display:flex; flex-direction:column; gap:8px;"></div>
-            </div>
-
-            <div class="divider"><span>or</span></div>
-
-            <div>
-                <p class="field-label">Start New Ledger</p>
-                <form id="newLedgerForm">
-                    <input type="text" id="ledgerName" placeholder="Trip Name (e.g., Bali 2026)" required autocomplete="off" class="field-input">
-                    <div class="input-group">
-                        <select id="ledgerCurrency" class="select-input" required>
-                            <option value="S$">SGD (S$)</option>
-                            <option value="$">USD ($)</option>
-                            <option value="HK$">HKD (HK$)</option>
-                            <option value="MOP$">MOP (MOP$)</option>
-                            <option value="¥">CNY (¥)</option>
-                            <option value="€">EUR (€)</option>
-                            <option value="£">GBP (£)</option>
-                            <option value="¥">JPY (¥)</option>
-                            <option value="RM">MYR (RM)</option>
-                            <option value="฿">THB (฿)</option>
-                        </select>
-                        <button type="submit" class="btn-primary" style="margin-bottom:0;">Create Ledger</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <div class="loading-wrap" id="loading-wrap">
-            <div class="spinner"></div>
-            <p class="loading-msg" id="loading-message">Consulting the grimoires…</p>
-        </div>
-    </div>
-</div>
-
-<header id="main-header">
-    <div class="header-inner">
-        <div class="header-top">
-            <div>
-                <div class="header-title" id="header-title"></div>
-                <div class="header-meta" id="header-meta"></div>
-            </div>
-            <div class="header-actions">
-                <button onclick="toggleChatModal()" class="icon-btn accent">
-                    <i data-lucide="pen-line" style="width:14px;height:14px;"></i>
-                    <span style="display:none;" id="ai-edit-label">AI Edit</span>
-                </button>
-                <button onclick="copyPlannerLink()" class="icon-btn" style="color:var(--accent); border-color:var(--accent-light);">
-                    <i data-lucide="link" style="width:14px;height:14px;"></i>
-                </button>
-                <button onclick="openDeleteModal()" class="icon-btn danger">
-                    <i data-lucide="trash-2" style="width:14px;height:14px;"></i>
-                </button>
-                <button onclick="softReset()" class="icon-btn">
-                    <i data-lucide="log-out" style="width:14px;height:14px;"></i>
-                </button>
-            </div>
-        </div>
-        <div id="filter-nav"></div>
-    </div>
-</header>
-<main id="planner-content" class="app-view-container"></main>
-
-<header id="ledger-header" style="display:none; background: var(--white); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 40;">
-    <div class="header-inner" style="max-width: 600px;">
-        <div class="header-top" style="align-items: center;">
-            <div class="header-title" id="ledger-header-title">Ledger</div>
-            <div class="header-actions">
-                <button onclick="copyLedgerLink()" class="icon-btn" style="color:var(--accent); border-color:var(--accent-light);">
-                    <i data-lucide="link" style="width:14px;height:14px;"></i> Share
-                </button>
-                <button onclick="deleteLedger()" class="icon-btn danger">
-                    <i data-lucide="trash-2" style="width:14px;height:14px;"></i>
-                </button>
-                <button onclick="softReset()" class="icon-btn">
-                    <i data-lucide="log-out" style="width:14px;height:14px;"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-</header>
-<main id="ledger-view" class="app-view-container">
-    <div class="day-card" style="padding-bottom: 15px;">
-        <div class="ledger-summary-title">Total Unpaid Debt</div>
-        <div class="chart-container" id="chartWrapper">
-            <canvas id="debtChart"></canvas>
-        </div>
+    <div class="intro">
+        <h1 class="welcome-text">Welcome.</h1>
+        <p class="bio-text">I'm Alan, building smart tools for the curious.</p>
     </div>
 
-    <div class="day-card">
-        <h2 class="section-title">1. Who's in?</h2>
-        <form id="addUserForm" class="input-group" style="margin-bottom: 10px;">
-            <input type="text" id="userName" class="field-input" placeholder="Enter name" required autocomplete="off" style="flex: 2; margin-bottom:0;">
-            <button type="submit" class="btn-primary" style="flex: 1; margin-bottom:0;">Add</button>
-        </form>
-        <ul id="userList" class="ledger-ul"></ul>
-    </div>
-
-    <div class="day-card" id="expenseSection">
-        <h2 class="section-title" id="expenseFormTitle">2. Add an Expense</h2>
-        <form id="addExpenseForm">
-            <select id="expenseCategory" class="select-input-light" required>
-                <option value="" disabled selected>-- Choose Category --</option>
-                <option value="Transport">Transport</option>
-                <option value="Accommodation">Accommodation</option>
-                <option value="Food & Drinks">Food & Drinks</option>
-                <option value="Activities">Activities</option>
-                <option value="Shopping">Shopping</option>
-                <option value="Settlement">User paid User (Settlement)</option>
-                <option value="Other">Other</option>
-            </select>
-
-            <input type="text" id="expenseDesc" class="field-input" placeholder="What was it for?" required autocomplete="off">
-            <input type="number" id="expenseAmount" class="field-input" placeholder="Amount" step="0.01" required>
-            
-            <p style="margin: 15px 0 8px 0; color: var(--muted); font-size: 0.85rem; font-weight: 600; text-transform: uppercase;">Who paid for it?</p>
-            <select id="expensePayer" class="select-input-light" required></select>
-            
-            <p style="margin: 15px 0 8px 0; color: var(--muted); font-size: 0.85rem; font-weight: 600; text-transform: uppercase;">Who's splitting it?</p>
-            <div id="involvedUsersContainer" class="checkbox-group"></div>
-
-            <button type="submit" id="submitExpenseBtn" class="btn-primary">Save Expense</button>
-            <button type="button" class="btn-secondary" id="cancelEditBtn" style="display:none; width: 100%;" onclick="cancelEdit()">Cancel Edit</button>
-        </form>
-    </div>
-
-    <div class="day-card" id="analyticsDashboard">
-        <h2 class="section-title">Trip Summary</h2>
-        <div class="ledger-summary-title">Total Spent</div>
-        <div id="totalSpentDisplay" class="expense-total" style="margin-bottom:20px;">0.00</div>
+    <div class="container">
+        <a href="https://alankhoocl.github.io/Trip-Planner-AI/" class="card" onclick="trackClick('Upcoming Trip')">
+            <span class="tag">Travel</span>
+            <i class="fa-solid fa-plane-departure"></i>
+            <h2>The Chronicles of Thousand AI Miles</h2>
+            <p>A visual itinerary architect for your next global escape.</p>
+        </a>
         
-        <div class="ledger-summary-title">By Category</div>
-        <div id="categorySummary"></div>
-        
-        <div class="ledger-summary-title" style="margin-top: 30px;">Who spent what?</div>
-        <div id="personSummary"></div>
-    </div>
+        <a href="https://alankhoocl.github.io/The-Legend-of-Thousand-AI-Books/" class="card" onclick="trackClick('ALAN RPG')">
+            <span class="tag">EdTech</span>
+            <i class="fa-solid fa-gamepad"></i>
+            <h2>The Legend of Thousand AI Books</h2>
+            <p>Gamifying the path to knowledge. Level up your learning.</p>
+        </a>
+              
+    </div> 
 
-    <div class="day-card">
-        <h2 class="section-title">3. Settle Up</h2>
-        <ul id="settlementList" class="ledger-ul"></ul>
-        <button id="copySettlementsBtn" class="btn-primary" style="display:none; margin-top: 20px;" onclick="copySettlements()">Copy for Group Chat</button>
-    </div>
+    <footer>
+        &copy; 2026 Crafted in the stars by <a href="https://github.com/alankhoocl" target="_blank">Alan</a>
+    </footer>
 
-    <div class="day-card">
-        <h2 class="section-title">Expense History</h2>
-        <ul id="expenseLogList" class="ledger-ul"></ul>
-    </div>
-</main>
+    <script>
+        function trackClick(pName) { gtag('event', 'select_content', {'item_id': pName}); }
 
-
-<div id="ai-chat-modal" class="fixed-modal">
-    <div class="modal-card">
-        <button class="modal-close" onclick="toggleChatModal()"><i data-lucide="x" style="width:14px;height:14px;"></i></button>
-        <p style="font-size:0.68rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;font-family:'DM Sans', sans-serif;">AI Editor</p>
-        <div class="modal-title">Edit Itinerary</div>
-        <div class="modal-subtitle">Ask Gemini to change anything — "Switch day 2 lunch to sushi", "Make day 3 all shopping", "Find a cheaper hotel".</div>
-        <textarea id="edit-prompt" class="field-input" style="height:110px;margin-bottom:14px;" placeholder="Your instructions…"></textarea>
-        <button id="submit-edit-btn" onclick="submitEdit()" class="btn-primary">
-            <i data-lucide="sparkles" style="width:16px;height:16px;"></i> Update Itinerary
-        </button>
-        <p id="chat-loading" style="display:none;text-align:center;font-size:0.82rem;color:var(--accent);margin-top:12px;font-weight:500;">Rewriting itinerary…</p>
-    </div>
-</div>
-
-<div id="delete-modal" class="fixed-modal">
-    <div class="modal-card" style="max-width:360px;">
-        <div class="modal-title" style="margin-bottom:8px;">Delete trip?</div>
-        <p id="delete-modal-msg" style="font-size:0.85rem;color:var(--muted);margin-bottom:20px;"></p>
-        <div class="delete-confirm-wrap">
-            <button class="confirm-yes" onclick="confirmDeletePlanner()">Yes, delete forever</button>
-            <button class="confirm-no" onclick="closeDeleteModal()">Cancel</button>
-        </div>
-    </div>
-</div>
-
-<script>
-// ============================================================
-//  API CONFIGURATION
-// ============================================================
-const PLANNER_API_URL = "https://script.google.com/macros/s/AKfycbypxapeVVtaUud1MGHaJbNtFHMHc7XHt17aGb8RTL_ikH7PlP1NzQoCSfL3KZXTV8IC/exec";
-const LEDGER_API_URL = "https://script.google.com/macros/s/AKfycbyXf27SbBGAib7DnywSkf7bh_ZIn_-Q-66O-mjV1SHJSC_UebMtyHbB_NccAq9yAZKT/exec";
-
-// ============================================================
-//  SHARED STATE & UTILS
-// ============================================================
-let particlesActive = true;
-
-async function fetchAPI(url, payload) {
-    const res = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(payload)
-    });
-    return await res.json();
-}
-
-function showToast(message, type = 'info', duration = 3500) {
-    const container = document.getElementById('toast-container');
-    const icons = { success: 'check-circle', error: 'x-circle', info: 'info', warning: 'alert-triangle' };
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    toast.innerHTML = `<i data-lucide="${icons[type] || 'info'}" style="width:14px;height:14px;flex-shrink:0;"></i> ${sanitizeText(message)}`;
-    container.appendChild(toast);
-    lucide.createIcons({ nodes: [toast] });
-    setTimeout(() => {
-        toast.style.animation = 'toastOut 0.3s ease forwards';
-        setTimeout(() => toast.remove(), 300);
-    }, duration);
-}
-
-function showSaveIndicator(state = 'saving') {
-    const el = document.getElementById('save-indicator');
-    const txt = document.getElementById('save-indicator-text');
-    el.classList.remove('error');
-    if (state === 'saving') { txt.textContent = 'Saving…'; el.classList.add('show'); } 
-    else if (state === 'saved') { txt.textContent = 'Saved'; setTimeout(() => el.classList.remove('show'), 1800); } 
-    else if (state === 'error') { el.classList.add('error'); txt.textContent = 'Save failed'; setTimeout(() => el.classList.remove('show'), 3000); }
-}
-
-function sanitizeText(str) {
-    if (!str) return '';
-    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-}
-function sanitizeURL(url) {
-    if (!url) return null;
-    try { const u = new URL(url); if (u.protocol === 'http:' || u.protocol === 'https:') return url; } catch (_) {}
-    return null;
-}
-
-function showLoading(msg) {
-    document.getElementById('loading-wrap').classList.add('show');
-    document.getElementById('loading-message').textContent = msg;
-}
-function hideLoading() {
-    document.getElementById('loading-wrap').classList.remove('show');
-}
-
-// ============================================================
-//  LANDING PAGE ROUTING
-// ============================================================
-function showPlannerPortal() {
-    document.getElementById('landing-paths-container').style.display = 'none';
-    document.getElementById('planner-portal').style.display = 'block';
-    fetchPlannerTrips();
-}
-
-function showLedgerPortal() {
-    document.getElementById('landing-paths-container').style.display = 'none';
-    document.getElementById('ledger-portal').style.display = 'block';
-    fetchLedgerTrips();
-}
-
-function backToPaths() {
-    document.getElementById('planner-portal').style.display = 'none';
-    document.getElementById('ledger-portal').style.display = 'none';
-    document.getElementById('landing-paths-container').style.display = 'flex';
-}
-
-function hideOverlay() {
-    particlesActive = false;
-    const overlay = document.getElementById('ai-overlay');
-    overlay.style.opacity = '0';
-    setTimeout(() => { overlay.style.display = 'none'; }, 1500);
-}
-
-function softReset() {
-    // Reset Planner
-    tripData = null; activeFilter = 'all';
-    Object.values(mapInstances).forEach(m => { try { m.remove(); } catch(_){} });
-    mapInstances = {}; openMaps.clear();
-    document.getElementById('planner-content').style.display = 'none';
-    document.getElementById('planner-content').innerHTML = '';
-    document.getElementById('main-header').style.display = 'none';
-
-    // Reset Ledger
-    activeLedgerId = null;
-    document.getElementById('ledger-view').style.display = 'none';
-    document.getElementById('ledger-header').style.display = 'none';
-
-    // Reset URL
-    const url = new URL(window.location);
-    url.searchParams.delete('planner');
-    url.searchParams.delete('ledger');
-    window.history.pushState({}, '', url);
-
-    // Show Overlay
-    const overlay = document.getElementById('ai-overlay');
-    overlay.style.display = 'flex';
-    backToPaths();
-    setTimeout(() => {
-        overlay.style.opacity = '1';
-        particlesActive = true;
-        initTitleParticles();
-    }, 10);
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    lucide.createIcons();
-    initTitleParticles();
-
-    if (window.innerWidth > 500) { document.getElementById('ai-edit-label').style.display = 'inline'; }
-
-    document.querySelectorAll('.model-chip').forEach(chip => {
-        chip.addEventListener('click', (e) => {
-            const group = e.target.closest('.model-chip-group');
-            group.querySelectorAll('.model-chip').forEach(c => c.classList.remove('active'));
-            e.target.classList.add('active');
-            document.getElementById('modelSelect').value = e.target.dataset.value;
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const rx = ((y - (rect.height / 2)) / (rect.height / 2)) * -10; 
+                const ry = ((x - (rect.width / 2)) / (rect.width / 2)) * 10;
+                card.style.transform = `perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) scale3d(1.02, 1.02, 1.02)`;
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = `perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)`;
+            });
         });
-    });
 
-    // Deep Linking Router
-    const params = new URLSearchParams(window.location.search);
-    const pTrip = params.get('planner');
-    const lTrip = params.get('ledger');
-
-    if (pTrip) {
-        document.getElementById('landing-paths-container').style.display = 'none';
-        document.getElementById('planner-portal').style.display = 'block';
-        document.getElementById('saved-trips-dropdown').value = pTrip;
-        loadPastTrip(pTrip);
-    } else if (lTrip) {
-        document.getElementById('landing-paths-container').style.display = 'none';
-        document.getElementById('ledger-portal').style.display = 'block';
-        fetchLedgerTrips().then(() => {
-            if(ledgerTrips.some(t => t.id === lTrip)) openLedger(lTrip);
-            else showToast("Ledger not found.", "error");
-        });
-    }
-});
-
-
-// ============================================================
-//  APP 1: PLANNER LOGIC
-// ============================================================
-let tripData = null;
-let activeFilter = 'all';
-let openMaps = new Set();
-let mapInstances = {};
-let saveTimeout = null;
-
-const themeStyles = {
-    amber: { dot: '#d97706', label: '#92400e', badge: 'background:#fef3c7;color:#92400e;', mapMarker: '#d97706' },
-    teal: { dot: '#0d9488', label: '#115e59', badge: 'background:#ccfbf1;color:#115e59;', mapMarker: '#0d9488' },
-    rose: { dot: '#e11d48', label: '#9f1239', badge: 'background:#ffe4e6;color:#9f1239;', mapMarker: '#e11d48' },
-    violet: { dot: '#7c3aed', label: '#4c1d95', badge: 'background:#ede9fe;color:#4c1d95;', mapMarker: '#7c3aed' },
-    sky: { dot: '#0284c7', label: '#0c4a6e', badge: 'background:#e0f2fe;color:#0c4a6e;', mapMarker: '#0284c7' },
-    emerald: { dot: '#059669', label: '#064e3b', badge: 'background:#d1fae5;color:#064e3b;', mapMarker: '#059669' },
-    pink: { dot: '#db2777', label: '#831843', badge: 'background:#fce7f3;color:#831843;', mapMarker: '#db2777' },
-    orange: { dot: '#ea580c', label: '#7c2d12', badge: 'background:#ffedd5;color:#7c2d12;', mapMarker: '#ea580c' },
-    purple: { dot: '#9333ea', label: '#581c87', badge: 'background:#f3e8ff;color:#581c87;', mapMarker: '#9333ea' },
-};
-function getTheme(colorKey) { return themeStyles[colorKey] || themeStyles.amber; }
-
-async function fetchPlannerTrips() {
-    const dropdown = document.getElementById('saved-trips-dropdown');
-    try {
-        const result = await fetchAPI(PLANNER_API_URL, { action: 'getTrips' });
-        if (result.success && result.trips && result.trips.length > 0) {
-            dropdown.innerHTML = result.trips.reverse().map(t => `<option value="${sanitizeText(t)}">${sanitizeText(t)}</option>`).join('');
-            dropdown.disabled = false; document.getElementById('load-btn').disabled = false;
-        } else { dropdown.innerHTML = '<option value="">No past memories found</option>'; }
-    } catch (err) {
-        dropdown.innerHTML = '<option value="">Could not consult records</option>';
-    }
-}
-
-async function loadPastTrip(forcedTitle = null) {
-    const title = forcedTitle || document.getElementById('saved-trips-dropdown').value;
-    if (!title) return;
-    showLoading('Materializing your itinerary…');
-    try {
-        const result = await fetchAPI(PLANNER_API_URL, { action: 'loadTrip', title: title });
-        if (result.success) {
-            tripData = result.data;
-            
-            const url = new URL(window.location);
-            url.searchParams.set('planner', tripData.overview.title);
-            url.searchParams.delete('ledger');
-            window.history.pushState({}, '', url);
-
-            hideOverlay();
-            setTimeout(() => {
-                document.getElementById('main-header').style.display = 'block';
-                document.getElementById('planner-content').style.display = 'block';
-                initPlannerUI();
-            }, 1500);
-        } else { showToast('Failed to load trip', 'error'); }
-    } catch (err) { showToast('Magic interrupted', 'error'); } 
-    finally { hideLoading(); }
-}
-
-async function generateTrip() {
-    const prompt = document.getElementById('trip-prompt').value.trim();
-    const dates = document.getElementById('trip-dates').value.trim() || 'TBD';
-    const pax = document.getElementById('trip-pax').value.trim() || '1';
-    const model = document.getElementById('modelSelect').value;
-
-    if (!prompt) return showToast('Please describe your journey first!', 'warning');
-
-    showLoading('Consulting the grimoires to map your journey…');
-    try {
-        const result = await fetchAPI(PLANNER_API_URL, { action: 'generate', prompt, dates, pax, model });
-        if (result.success) {
-            tripData = result.data;
-            
-            const url = new URL(window.location);
-            url.searchParams.set('planner', tripData.overview.title);
-            url.searchParams.delete('ledger');
-            window.history.pushState({}, '', url);
-
-            hideOverlay();
-            setTimeout(() => {
-                document.getElementById('main-header').style.display = 'block';
-                document.getElementById('planner-content').style.display = 'block';
-                initPlannerUI();
-            }, 1500);
-        } else { showToast('Magic failed', 'error'); }
-    } catch (err) { showToast('Magic interrupted', 'error'); } 
-    finally { hideLoading(); }
-}
-
-function copyPlannerLink() {
-    const url = new URL(window.location.href);
-    url.searchParams.set('planner', tripData.overview.title);
-    url.searchParams.delete('ledger');
-    navigator.clipboard.writeText(url.href).then(() => {
-        showToast('Trip Link Copied! 🔗', 'success');
-    }).catch(() => showToast('Failed to copy link', 'error'));
-}
-
-function initPlannerUI() {
-    document.getElementById('header-title').textContent = tripData.overview.title;
-    renderPlannerHeaderMeta();
-    createBlossoms();
-    renderPlannerFilters();
-    renderPlannerContent();
-}
-
-function schedulePlannerSave() {
-    clearTimeout(saveTimeout); showSaveIndicator('saving');
-    saveTimeout = setTimeout(async () => {
-        try {
-            const result = await fetchAPI(PLANNER_API_URL, { action: 'update', title: tripData.overview.title, tripData });
-            if (result.success) showSaveIndicator('saved'); else showSaveIndicator('error');
-        } catch (err) { showSaveIndicator('error'); }
-    }, 1200);
-}
-
-function renderPlannerHeaderMeta() {
-    const grandTotal = getBaseBudgetTotal() + getTotalActivityExpenses();
-    document.getElementById('header-meta').innerHTML = `
-        <div class="meta-chip"><i data-lucide="calendar" style="width:13px;height:13px;"></i> ${sanitizeText(tripData.overview.dates)}</div>
-        <div class="meta-chip"><i data-lucide="users" style="width:13px;height:13px;"></i> ${sanitizeText(tripData.overview.pax || '')} pax</div>
-        <div class="meta-chip"><i data-lucide="wallet" style="width:13px;height:13px;"></i> Total: $${grandTotal.toLocaleString()} SGD</div>
-    `;
-    lucide.createIcons({ nodes: [document.getElementById('header-meta')] });
-}
-
-function renderPlannerFilters() {
-    const nav = document.getElementById('filter-nav');
-    let html = `<button onclick="setFilter('all')" class="filter-btn ${activeFilter === 'all' ? 'active' : ''}">
-        <i data-lucide="layout-list" style="width:12px;height:12px;"></i> Full Itinerary
-    </button>`;
-    (tripData.locations || []).forEach(loc => {
-        const theme = getTheme(loc.color);
-        html += `<button onclick="setFilter('${sanitizeText(loc.id)}')" class="filter-btn ${activeFilter === loc.id ? 'active' : ''}">
-            <span style="width:8px;height:8px;border-radius:50%;background:${theme.dot};display:inline-block;flex-shrink:0;"></span>
-            ${sanitizeText(loc.name)}
-        </button>`;
-    });
-    nav.innerHTML = html; lucide.createIcons({ nodes: [nav] });
-}
-
-function renderPlannerContent() {
-    let html = '';
-    if (activeFilter === 'all') html += renderBudget(); else html += renderHero();
-    html += renderExpenseSummary(); html += renderTimeline();
-    document.getElementById('planner-content').innerHTML = html;
-    lucide.createIcons({ nodes: [document.getElementById('planner-content')] });
-}
-
-function setFilter(filterId) {
-    activeFilter = filterId;
-    Object.values(mapInstances).forEach(m => { try { m.remove(); } catch(_){} });
-    mapInstances = {}; openMaps.clear();
-    renderPlannerFilters(); renderPlannerContent(); window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-// Modal & Delete Logic
-function toggleChatModal() { document.getElementById('ai-chat-modal').classList.toggle('show'); }
-async function submitEdit() {
-    const prompt = document.getElementById('edit-prompt').value.trim();
-    if(!prompt) return;
-    document.getElementById('submit-edit-btn').disabled = true; document.getElementById('chat-loading').style.display = 'block';
-    try {
-        const result = await fetchAPI(PLANNER_API_URL, { action: 'edit', prompt, currentData: tripData, model: document.getElementById('modelSelect').value });
-        if(result.success){ tripData = result.data; document.getElementById('edit-prompt').value=''; toggleChatModal(); initPlannerUI(); showToast('Itinerary updated!','success');}
-    } catch(err) {} finally { document.getElementById('submit-edit-btn').disabled = false; document.getElementById('chat-loading').style.display = 'none'; }
-}
-function openDeleteModal() { document.getElementById('delete-modal-msg').textContent = `"${tripData.overview.title}" will be permanently erased.`; document.getElementById('delete-modal').style.display = 'flex'; }
-function closeDeleteModal() { document.getElementById('delete-modal').style.display = 'none'; }
-async function confirmDeletePlanner() {
-    closeDeleteModal();
-    try {
-        await fetchAPI(PLANNER_API_URL, { action: 'delete', title: tripData.overview.title });
-        showToast('Journey erased.', 'success'); setTimeout(() => softReset(), 800);
-    } catch (e) { showToast('Network error', 'error'); }
-}
-
-function getTotalActivityExpenses() { return tripData.itinerary.reduce((s, day) => s + day.events.reduce((s2, e) => s2 + (e.expense || 0), 0), 0); }
-function getDayExpenses(dayNum) { const day = tripData.itinerary.find(d => d.day === dayNum); return day ? day.events.reduce((s, e) => s + (e.expense || 0), 0) : 0; }
-function getLocationExpenses(locId) { return tripData.itinerary.filter(d => d.location === locId).reduce((s, day) => s + day.events.reduce((s2, e) => s2 + (e.expense || 0), 0), 0); }
-function getBaseBudgetTotal() { return (tripData.budget || []).reduce((s, b) => s + (b.amount || 0), 0); }
-
-function renderBudget() {
-    if (!tripData.budget || !tripData.budget.length) return '';
-    let html = `<div class="section-title"><i data-lucide="credit-card" style="width:18px;height:18px;color:var(--muted);"></i> Base Estimates</div><div class="budget-grid">`;
-    tripData.budget.forEach((item, idx) => {
-        html += `<div class="budget-card"><div class="budget-icon"><i data-lucide="${sanitizeText(item.icon || 'circle')}" style="width:16px;height:16px;"></i></div><div style="flex:1;min-width:0;"><div class="budget-label">${sanitizeText(item.item)}</div><div class="budget-amount-wrap"><span class="budget-currency">$</span><input type="number" min="0" value="${item.amount || 0}" onchange="updateBaseExpense(${idx}, this.value)" class="budget-amount-input"></div></div></div>`;
-    });
-    return html + '</div>';
-}
-function updateBaseExpense(idx, val) { tripData.budget[idx].amount = Math.max(0, parseInt(val) || 0); schedulePlannerSave(); renderPlannerHeaderMeta(); document.getElementById('expense-summary-section').outerHTML = renderExpenseSummary(); lucide.createIcons({ nodes: [document.getElementById('planner-content')] }); }
-
-function renderExpenseSummary() {
-    const activityTotal = activeFilter === 'all' ? getTotalActivityExpenses() : getLocationExpenses(activeFilter);
-    const grandTotal = getBaseBudgetTotal() + getTotalActivityExpenses();
-    const pct = Math.min((getTotalActivityExpenses() / (grandTotal || 1)) * 100, 100);
-    const filteredLocs = activeFilter === 'all' ? (tripData.locations || []) : (tripData.locations || []).filter(l => l.id === activeFilter);
-    let locRows = '';
-    filteredLocs.forEach(loc => { const theme = getTheme(loc.color); const amt = getLocationExpenses(loc.id); locRows += `<div class="loc-row"><span class="loc-name" style="color:${theme.label};"><span style="width:8px;height:8px;border-radius:50%;background:${theme.dot};display:inline-block;"></span>${sanitizeText(loc.name)}</span><span class="loc-amount">$${amt.toLocaleString()}</span></div>`; });
-    return `<div class="expense-summary" id="expense-summary-section"><div class="expense-header"><div style="display:flex;align-items:center;gap:10px;"><div class="section-title" style="margin:0;"><i data-lucide="wallet" style="width:18px;height:18px;color:var(--accent);"></i> Activity Spend</div><button class="zeroise-btn" onclick="zeroisePlannerExpenses()">Reset</button></div><div style="text-align:right;"><div class="expense-total">$${activityTotal.toLocaleString()}<span class="expense-currency">SGD</span></div></div></div><div class="progress-bar-track"><div class="progress-bar-fill" style="width:${pct.toFixed(1)}%;"></div></div><div class="loc-breakdown">${locRows}</div></div>`;
-}
-function zeroisePlannerExpenses() { tripData.itinerary.forEach(day => { day.events.forEach(e => { e.expense = 0; }); }); schedulePlannerSave(); renderPlannerHeaderMeta(); renderPlannerContent(); showToast('Reset to $0.', 'info'); }
-
-function renderHero() {
-    const loc = (tripData.locations || []).find(l => l.id === activeFilter); if (!loc || !loc.image) return ''; const safeUrl = sanitizeURL(loc.image); if (!safeUrl) return '';
-    return `<div class="loc-hero"><img src="${safeUrl}"><div class="loc-hero-overlay"><div class="loc-hero-name">${sanitizeText(loc.name)}</div></div></div>`;
-}
-
-function renderTimeline() {
-    const days = (tripData.itinerary || []).filter(d => activeFilter === 'all' || d.location === activeFilter);
-    if (!days.length) return `<div style="text-align:center;padding:60px 0;color:var(--muted);font-size:0.9rem;">No events found.</div>`;
-    let html = '';
-    days.forEach(day => {
-        const loc = (tripData.locations || []).find(l => l.id === day.location); const theme = getTheme(loc ? loc.color : 'amber'); const hasMap = day.events && day.events.some(e => e.latlng);
-        html += `<div class="day-card"><div class="day-header"><div><div class="day-label" style="color:${theme.label};">Day ${day.day} &bull; ${sanitizeText(day.date)}</div><div class="day-title">${sanitizeText(day.title)}</div></div><div class="day-chips"><div class="day-expense-chip" id="day-expense-${day.day}">$${getDayExpenses(day.day).toLocaleString()}</div>${hasMap ? `<button onclick="toggleMap(${day.day})" id="map-toggle-${day.day}" class="map-toggle"><i data-lucide="map" style="width:11px;height:11px;"></i> Map</button>` : ''}</div></div>${hasMap ? `<div id="map-container-${day.day}" class="map-container"><div id="map-${day.day}" class="day-map"></div></div>` : ''}<div class="events-wrap"><div class="timeline-rail">`;
-        (day.events || []).forEach((event, idx) => {
-            const safeLink = sanitizeURL(event.link); const rawDesc = event.desc || ''; const nameHtml = safeLink ? `<a href="${safeLink}" target="_blank" rel="noopener noreferrer">${rawDesc}</a>` : rawDesc;
-            html += `<div class="event-item"><div class="event-dot" style="border-color:${theme.dot};"><i data-lucide="${sanitizeText(event.icon || 'circle')}" style="width:9px;height:9px;color:${theme.dot};"></i></div><div class="event-row"><div class="event-time">${sanitizeText(event.time || '')}</div><div class="event-body"><div class="event-name">${nameHtml}</div></div><div class="expense-input-wrap"><span class="expense-currency-label">$</span><input type="number" min="0" step="1" class="expense-field" value="${event.expense || 0}" onchange="updatePlannerExpense(${day.day}, ${idx}, this.value)"></div></div></div>`;
-        });
-        html += `</div></div></div>`;
-    });
-    return html;
-}
-function updatePlannerExpense(dayNum, eventIdx, value) {
-    const day = tripData.itinerary.find(d => d.day === dayNum); if (!day || !day.events[eventIdx]) return;
-    day.events[eventIdx].expense = Math.max(0, parseInt(value) || 0);
-    document.getElementById(`day-expense-${dayNum}`).textContent = `$${getDayExpenses(dayNum).toLocaleString()}`;
-    document.getElementById('expense-summary-section').outerHTML = renderExpenseSummary();
-    renderPlannerHeaderMeta(); lucide.createIcons({ nodes: [document.getElementById('planner-content')] }); schedulePlannerSave();
-}
-
-function toggleMap(dayNum) {
-    const container = document.getElementById(`map-container-${dayNum}`); const btn = document.getElementById(`map-toggle-${dayNum}`);
-    if (openMaps.has(dayNum)) { container.classList.remove('open'); openMaps.delete(dayNum); if(btn) btn.classList.remove('open'); } 
-    else { container.classList.add('open'); openMaps.add(dayNum); if(btn) btn.classList.add('open'); setTimeout(() => initMap(dayNum), 80); }
-}
-function initMap(dayNum) {
-    const mapEl = document.getElementById(`map-${dayNum}`); if (!mapEl || mapInstances[dayNum]) return;
-    const day = tripData.itinerary.find(d => d.day === dayNum); const events = (day.events || []).filter(e => e.latlng); if (!events.length) return;
-    const theme = getTheme((tripData.locations || []).find(l => l.id === day.location)?.color || 'amber');
-    const map = L.map(mapEl, { scrollWheelZoom: false }); mapInstances[dayNum] = map;
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-    const latlngs = [];
-    events.forEach((e, i) => {
-        const icon = L.divIcon({ className: '', html: `<div style="background:${theme.mapMarker};color:#fff;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,0.25);">${i + 1}</div>`, iconSize: [26, 26], iconAnchor: [13, 13] });
-        L.marker(e.latlng, { icon }).addTo(map).bindPopup(`<strong>${i + 1}. ${sanitizeText((e.desc || '').replace(/<[^>]*>/g, ''))}</strong>`);
-        latlngs.push(e.latlng);
-    });
-    if (latlngs.length > 1) L.polyline(latlngs, { color: theme.mapMarker, weight: 2.5, dashArray: '6 6', opacity: 0.8 }).addTo(map);
-    if (latlngs.length) map.fitBounds(L.latLngBounds(latlngs), { padding: [30, 30] });
-    setTimeout(() => { try { map.invalidateSize(); } catch(_) {} }, 450);
-}
-
-function initTitleParticles() {
-    const c = document.getElementById('title-canvas'); if (!c) return; const ctx = c.getContext('2d');
-    function resize() { c.width = window.innerWidth; c.height = window.innerHeight; }
-    window.addEventListener('resize', resize); resize();
-    const particles = Array.from({length: 80}, () => ({ x: Math.random() * c.width, y: Math.random() * c.height, vy: -(Math.random() * 0.4 + 0.1), vx: (Math.random() - 0.5) * 0.2, size: Math.random() * 2 + 0.5, alpha: Math.random() * 0.4 + 0.1, color: ['#7ab8d0','#a0c8e0','#c0e0f0','#6090a8','#8ab0c8'][Math.floor(Math.random()*5)] }));
-    function tick() {
-        if (!particlesActive) return; ctx.clearRect(0,0,c.width,c.height);
-        particles.forEach(p => { p.x += p.vx; p.y += p.vy; if (p.y < -5) { p.y = c.height + 5; p.x = Math.random()*c.width; }
-            ctx.globalAlpha = p.alpha * (0.7 + 0.3*Math.sin(Date.now()*0.001 + p.x)); ctx.fillStyle = p.color; ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill(); });
-        requestAnimationFrame(tick);
-    }
-    particlesActive = true; tick();
-}
-function createBlossoms() {
-    const container = document.getElementById('blossom-container'); container.innerHTML = '';
-    for (let i = 0; i < 25; i++) {
-        const p = document.createElement('div'); p.className = 'petal'; const s = Math.random() * 7 + 5;
-        p.style.cssText = `width:${s}px;height:${s}px;left:${Math.random() * 120 - 10}vw; animation-duration:${Math.random() * 9 + 7}s; animation-delay:-${Math.random() * 12}s; opacity:${Math.random() * 0.4 + 0.3};`;
-        container.appendChild(p);
-    }
-}
-
-
-// ============================================================
-//  APP 2: LEDGER (WHO PAY WHO) LOGIC
-// ============================================================
-let ledgerTrips = [];
-let activeLedgerId = null;
-let editingExpenseId = null;
-let currentSettlements = [];
-let chartInstance = null;
-
-async function fetchLedgerTrips() {
-    const listEl = document.getElementById('ledgerList');
-    const msgEl = document.getElementById('ledgerLoadingMsg');
-    msgEl.style.display = 'block'; listEl.innerHTML = '';
-    try {
-        const response = await fetch(LEDGER_API_URL);
-        ledgerTrips = await response.json();
-        
-        msgEl.style.display = 'none';
-        if (ledgerTrips.length === 0) { listEl.innerHTML = '<div class="empty-state-main" style="border:none;background:transparent;">No ledgers yet!</div>'; return; }
-        
-        // Reverse array so oldest appear first per user request
-        const sortedLedgers = ledgerTrips.reverse();
-
-        sortedLedgers.forEach(trip => {
-            const btn = document.createElement('button');
-            btn.className = 'btn-secondary';
-            btn.style.width = '100%';
-            btn.style.justifyContent = 'flex-start';
-            btn.innerHTML = `<i data-lucide="book" style="width:16px;height:16px;"></i> ${sanitizeText(trip.name)} <span style="margin-left:auto;font-size:0.75rem;opacity:0.6;">${trip.users.length} pax</span>`;
-            btn.onclick = () => openLedger(trip.id);
-            listEl.appendChild(btn);
-        });
-        lucide.createIcons({ nodes: [listEl] });
-
-    } catch(err) {
-        msgEl.innerHTML = '<span style="color:#ef4444;">Connection failed.</span>';
-    }
-}
-
-document.getElementById('newLedgerForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const rawName = document.getElementById('ledgerName').value.trim();
-    const currency = document.getElementById('ledgerCurrency').value;
-    const newTrip = { id: 'TRIP_' + Date.now().toString(), name: rawName.charAt(0).toUpperCase() + rawName.slice(1), currency: currency, users: [], expenses: [] };
-    ledgerTrips.push(newTrip); 
-    document.getElementById('ledgerName').value = '';
-    openLedger(newTrip.id);
-    
-    fetch(LEDGER_API_URL, {
-        method: 'POST', headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify({ action: 'saveTrip', trip: newTrip })
-    });
-});
-
-function openLedger(id) {
-    activeLedgerId = id;
-    
-    const url = new URL(window.location);
-    url.searchParams.set('ledger', id);
-    url.searchParams.delete('planner');
-    window.history.pushState({}, '', url);
-
-    hideOverlay();
-    setTimeout(() => {
-        document.getElementById('ledger-header').style.display = 'block';
-        document.getElementById('ledger-view').style.display = 'block';
-        cancelEdit(); renderLedgerDetails();
-    }, 1500);
-}
-
-function getActiveLedger() { return ledgerTrips.find(t => t.id === activeLedgerId); }
-
-async function saveLedgerData(tripToSave) {
-    if (!tripToSave) return;
-    showSaveIndicator('saving');
-    try {
-        await fetch(LEDGER_API_URL, {
-            method: 'POST', headers: { "Content-Type": "text/plain;charset=utf-8" },
-            body: JSON.stringify({ action: 'saveTrip', trip: tripToSave })
-        });
-        showSaveIndicator('saved');
-    } catch (e) { showSaveIndicator('error'); }
-}
-
-function deleteLedger() {
-    if (!confirm("Are you sure you want to delete this ledger forever?")) return;
-    const tripIdToDelete = activeLedgerId;
-    ledgerTrips = ledgerTrips.filter(t => t.id !== activeLedgerId);
-    softReset();
-    fetch(LEDGER_API_URL, {
-        method: 'POST', headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify({ action: 'deleteTrip', tripId: tripIdToDelete })
-    }); 
-}
-
-function copyLedgerLink() {
-    const url = new URL(window.location.href);
-    url.searchParams.set('ledger', activeLedgerId);
-    url.searchParams.delete('planner');
-    navigator.clipboard.writeText(url.href).then(() => {
-        showToast('Ledger Link Copied! 🔗', 'success');
-    });
-}
-
-// User Logic
-document.getElementById('addUserForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const rawName = document.getElementById('userName').value.trim();
-    const name = rawName.charAt(0).toUpperCase() + rawName.slice(1);
-    const trip = getActiveLedger();
-    if (name && !trip.users.includes(name)) { trip.users.push(name); renderLedgerDetails(); document.getElementById('userName').value = ''; saveLedgerData(trip); }
-});
-
-function deleteUser(userName) {
-    const trip = getActiveLedger();
-    if (trip.expenses.some(exp => exp.payer === userName || (exp.involvedUsers && exp.involvedUsers.includes(userName)))) return showToast(`${userName} is tied to some expenses.`, 'warning');
-    if (!confirm(`Remove ${userName}?`)) return;
-    trip.users = trip.users.filter(u => u !== userName); renderLedgerDetails(); saveLedgerData(trip);
-}
-
-// Expense Logic
-document.getElementById('addExpenseForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const trip = getActiveLedger();
-    if (trip.users.length === 0) return showToast("Please add some people first!", 'warning');
-
-    const checkboxes = document.querySelectorAll('input[name="involved"]:checked');
-    const involvedUsers = Array.from(checkboxes).map(cb => cb.value);
-    if(involvedUsers.length === 0) return showToast("Please select who is splitting this expense.", 'warning');
-
-    const category = document.getElementById('expenseCategory').value;
-    const rawDesc = document.getElementById('expenseDesc').value.trim();
-    
-    const expenseData = {
-        id: editingExpenseId || 'EXP_' + Date.now(),
-        desc: `[${category}] ${rawDesc}`,
-        amount: parseFloat(document.getElementById('expenseAmount').value),
-        payer: document.getElementById('expensePayer').value,
-        involvedUsers: involvedUsers
-    };
-
-    if (editingExpenseId) { const index = trip.expenses.findIndex(e => e.id === editingExpenseId); trip.expenses[index] = expenseData; } 
-    else { trip.expenses.push(expenseData); }
-
-    cancelEdit(); renderLedgerDetails(); e.target.reset(); saveLedgerData(trip);
-});
-
-function deleteExpense(expenseId) {
-    if(!confirm("Delete this expense?")) return;
-    const trip = getActiveLedger(); trip.expenses = trip.expenses.filter(e => e.id !== expenseId); renderLedgerDetails(); saveLedgerData(trip);
-}
-
-function editExpense(expenseId) {
-    const trip = getActiveLedger(); const exp = trip.expenses.find(e => e.id === expenseId); if(!exp) return;
-    editingExpenseId = expenseId;
-    const match = exp.desc.match(/^\[(.*?)\] (.*)$/);
-    if (match) { document.getElementById('expenseCategory').value = match[1]; document.getElementById('expenseDesc').value = match[2]; } 
-    else { document.getElementById('expenseCategory').value = "Other"; document.getElementById('expenseDesc').value = exp.desc; }
-    document.getElementById('expenseAmount').value = exp.amount; document.getElementById('expensePayer').value = exp.payer;
-    document.querySelectorAll('input[name="involved"]').forEach(cb => { cb.checked = exp.involvedUsers.includes(cb.value); });
-    document.getElementById('expenseFormTitle').textContent = "Edit Expense"; 
-    document.getElementById('submitExpenseBtn').textContent = "Update Expense";
-    document.getElementById('cancelEditBtn').style.display = "block";
-    window.scrollTo({ top: document.getElementById('expenseFormTitle').offsetTop - 100, behavior: 'smooth' });
-}
-
-function cancelEdit() {
-    editingExpenseId = null; document.getElementById('addExpenseForm').reset();
-    document.getElementById('expenseFormTitle').textContent = "2. Add an Expense"; 
-    document.getElementById('submitExpenseBtn').textContent = "Save Expense";
-    document.getElementById('cancelEditBtn').style.display = "none";
-    document.querySelectorAll('input[name="involved"]').forEach(cb => cb.checked = true);
-}
-
-function executeSettlement(fromUser, toUser, amount) {
-    const curr = getActiveLedger().currency || '$';
-    if(!confirm(`Mark as paid? This records that ${fromUser} paid ${curr}${amount.toFixed(2)} to ${toUser}.`)) return;
-    const trip = getActiveLedger();
-    trip.expenses.push({ id: 'SETTLE_' + Date.now(), desc: `[Settlement] Paid to ${toUser}`, amount: parseFloat(amount), payer: fromUser, involvedUsers: [toUser] });
-    renderLedgerDetails(); saveLedgerData(trip);
-}
-
-function copySettlements() {
-    const trip = getActiveLedger(); const curr = trip.currency || '$'; if(!trip || currentSettlements.length === 0) return;
-    let text = `${trip.name} Settlements\n------------------------\n`;
-    currentSettlements.forEach(s => { text += `💸 ${s.from} needs to pay ${curr}${s.amount.toFixed(2)} to ${s.to}\n`; });
-    navigator.clipboard.writeText(text).then(() => { showToast('Copied to clipboard!', 'success'); });
-}
-
-function renderDebtChart(trip) {
-    const ctx = document.getElementById('debtChart').getContext('2d'); const curr = trip.currency || '$'; 
-    if (chartInstance) chartInstance.destroy();
-    if (trip.expenses.length === 0) {
-        chartInstance = new Chart(ctx, { type: 'line', data: { labels: ['Start'], datasets: [{ data: [0], borderColor: '#8a8070' }] }, options: { maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { enabled: false } }, scales: { y: { display: false }, x: { display: false } } } });
-        document.getElementById('chartWrapper').classList.remove('vibrating-chart'); return;
-    }
-    let chartLabels = ['Start']; let chartData = [0]; let runningBalances = {}; trip.users.forEach(u => runningBalances[u] = 0);
-    trip.expenses.forEach(exp => {
-        const involved = exp.involvedUsers || trip.users; const amt = parseFloat(exp.amount) || 0; 
-        if (involved.length > 0) {
-            const split = amt / involved.length; runningBalances[exp.payer] = (runningBalances[exp.payer] || 0) + amt;
-            involved.forEach(u => { runningBalances[u] = (runningBalances[u] || 0) - split; });
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => { navigator.serviceWorker.register('./sw.js'); });
         }
-        let currentDebt = 0; for (let user in runningBalances) if (runningBalances[user] > 0.01) currentDebt += runningBalances[user];
-        chartData.push(currentDebt);
-        const match = exp.desc.match(/^\[.*?\] (.*)$/); let labelName = match ? match[1] : exp.desc;
-        if(labelName && labelName.length > 12) labelName = labelName.substring(0, 12) + '...'; chartLabels.push(labelName || 'Expense');
-    });
-
-    const latestDebt = chartData[chartData.length - 1]; const cw = document.getElementById('chartWrapper');
-    if (latestDebt > 5) { cw.classList.add('vibrating-chart'); cw.style.setProperty('--shake-intensity', `${Math.min(latestDebt/40, 4).toFixed(1)}px`); cw.style.animationDuration = `${Math.max(0.08, 0.3 - (latestDebt/1000))}s`; } 
-    else { cw.classList.remove('vibrating-chart'); }
-
-    const isTrendingDown = chartData.length > 2 && chartData[chartData.length - 1] < chartData[chartData.length - 2];
-    const lineColor = isTrendingDown ? '#10b981' : '#c9773a'; const bgColor = isTrendingDown ? 'rgba(16, 185, 129, 0.1)' : 'rgba(201, 119, 58, 0.1)';
-
-    chartInstance = new Chart(ctx, {
-        type: 'line',
-        data: { labels: chartLabels, datasets: [{ data: chartData, borderColor: lineColor, backgroundColor: bgColor, borderWidth: 2, fill: true, tension: 0.3, pointRadius: 3, pointBackgroundColor: lineColor }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => curr + c.parsed.y.toFixed(2) } } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { callback: v => curr + v } }, x: { grid: { display: false } } } }
-    });
-}
-
-function renderLedgerDetails() {
-    const trip = getActiveLedger(); if (!trip) return;
-    const curr = trip.currency || '$';
-
-    document.getElementById('ledger-header-title').textContent = trip.name;
-    const userList = document.getElementById('userList'); const expPayer = document.getElementById('expensePayer'); const invCont = document.getElementById('involvedUsersContainer'); const expLog = document.getElementById('expenseLogList');
-    userList.innerHTML = ''; expPayer.innerHTML = '<option value="" disabled selected>-- Select Payer --</option>'; invCont.innerHTML = ''; expLog.innerHTML = '';
-    
-    if(trip.users.length === 0) userList.innerHTML = '<div class="empty-state-main">No one is in this trip yet.</div>';
-
-    trip.users.forEach(user => {
-        userList.innerHTML += `<li class="ledger-li"><span style="font-weight: 500;">${sanitizeText(user)}</span><button class="icon-btn danger" onclick="deleteUser('${sanitizeText(user)}')"><i data-lucide="x" style="width:14px;height:14px;"></i></button></li>`;
-        expPayer.innerHTML += `<option value="${sanitizeText(user)}">${sanitizeText(user)}</option>`;
-        invCont.innerHTML += `<label><input type="checkbox" name="involved" value="${sanitizeText(user)}" checked> ${sanitizeText(user)}</label>`;
-    });
-
-    document.getElementById('expenseAmount').placeholder = `Amount (${curr})`;
-
-    let categoryTotals = {}; let individualShare = {}; let totalCost = 0; let balances = {};
-    trip.users.forEach(u => { individualShare[u] = 0; balances[u] = 0; });
-
-    if (trip.expenses.length === 0) expLog.innerHTML = '<div class="empty-state-main">No expenses yet.</div>';
-
-    trip.expenses.forEach(exp => {
-        const involved = exp.involvedUsers || trip.users; const involvedCount = involved.length;
-        let displayDesc = sanitizeText(exp.desc); let categoryName = "Other";
-        const match = exp.desc.match(/^\[(.*?)\] (.*)$/);
-        if (match) { 
-            categoryName = match[1]; 
-            const isSettle = categoryName === 'Settlement';
-            displayDesc = `<span class="ledger-summary-title" style="color:${isSettle ? 'var(--success)' : 'var(--muted)'}; margin-bottom:2px; display:block;">${sanitizeText(match[1])}</span><span style="font-size: 1rem; color:var(--ink); font-weight:${isSettle ? '700' : '500'};">${sanitizeText(match[2])}</span>`; 
-        }
-
-        expLog.innerHTML += `<li class="ledger-li" style="align-items: flex-start; flex-direction: column;">
-            <div style="width: 100%; display: flex; justify-content: space-between; margin-bottom: 12px;">
-                <div>${displayDesc}<br><small style="color:var(--muted);">Paid by ${sanitizeText(exp.payer)}</small></div>
-                <div style="text-align: right;"><span style="color:var(--ink); font-weight: 700; font-size: 1.1rem; font-variant-numeric: tabular-nums;">${curr}${exp.amount.toFixed(2)}</span></div>
-            </div>
-            <div style="display:flex; gap:8px; width:100%;"><button class="icon-btn" onclick="editExpense('${exp.id}')">Edit</button><button class="icon-btn danger" onclick="deleteExpense('${exp.id}')">Delete</button></div>
-        </li>`;
-
-        if (categoryName !== 'Settlement') { totalCost += parseFloat(exp.amount) || 0; categoryTotals[categoryName] = (categoryTotals[categoryName] || 0) + (parseFloat(exp.amount) || 0); }
-        if(involvedCount > 0) {
-            const split = (parseFloat(exp.amount) || 0) / involvedCount; balances[exp.payer] += (parseFloat(exp.amount) || 0);
-            involved.forEach(u => { balances[u] -= split; if (categoryName !== 'Settlement') individualShare[u] += split; });
-        }
-    });
-    lucide.createIcons({ nodes: [expLog, userList] });
-    renderDebtChart(trip);
-
-    document.getElementById('totalSpentDisplay').textContent = `${curr}${totalCost.toFixed(2)}`;
-    const catSum = document.getElementById('categorySummary'); const perSum = document.getElementById('personSummary'); catSum.innerHTML = ''; perSum.innerHTML = '';
-    
-    if (totalCost === 0) { catSum.innerHTML = '<p class="empty-state-main" style="padding:10px;">Nothing spent yet.</p>'; perSum.innerHTML = '<p class="empty-state-main" style="padding:10px;">Nothing spent yet.</p>'; } 
-    else {
-        Object.entries(categoryTotals).sort((a, b) => b[1] - a[1]).forEach(([cat, amt]) => {
-            catSum.innerHTML += `<div class="loc-row" style="margin-bottom:6px;"><span class="loc-name">${sanitizeText(cat)}</span> <strong class="loc-amount">${curr}${amt.toFixed(2)}</strong></div><div class="progress-bar-track"><div class="progress-bar-fill" style="width: ${(amt / totalCost) * 100}%"></div></div>`;
-        });
-        const sortedPersons = Object.entries(individualShare).sort((a, b) => b[1] - a[1]); const maxShare = sortedPersons.length > 0 ? sortedPersons[0][1] : 1; 
-        sortedPersons.forEach(([person, amt]) => {
-            perSum.innerHTML += `<div class="loc-row" style="margin-bottom:6px;"><span class="loc-name">${sanitizeText(person)}</span> <strong class="loc-amount">${curr}${amt.toFixed(2)}</strong></div><div class="progress-bar-track"><div class="progress-bar-fill" style="width: ${(amt / maxShare) * 100}%; background: var(--success);"></div></div>`;
-        });
-    }
-
-    let debtors = []; let creditors = [];
-    for (const [user, balance] of Object.entries(balances)) { if (balance < -0.01) debtors.push({ user, amount: Math.abs(balance) }); else if (balance > 0.01) creditors.push({ user, amount: balance }); }
-    debtors.sort((a, b) => b.amount - a.amount); creditors.sort((a, b) => b.amount - a.amount);
-
-    currentSettlements = []; let i = 0; let j = 0;
-    while (i < debtors.length && j < creditors.length) {
-        let debtor = debtors[i]; let creditor = creditors[j]; let minAmount = Math.min(debtor.amount, creditor.amount);
-        currentSettlements.push({ from: debtor.user, to: creditor.user, amount: minAmount });
-        debtor.amount -= minAmount; creditor.amount -= minAmount;
-        if (Math.abs(debtor.amount) < 0.01) i++; if (Math.abs(creditor.amount) < 0.01) j++;
-    }
-
-    const setList = document.getElementById('settlementList'); setList.innerHTML = '';
-    document.getElementById('copySettlementsBtn').style.display = 'none';
-    if (currentSettlements.length === 0) {
-        if (trip.expenses.length > 0) setList.innerHTML = '<div class="empty-state-main" style="color:var(--success); border-color:var(--success);">Everyone is settled up!</div>';
-        else setList.innerHTML = '<div class="empty-state-main">Add expenses to see who owes who.</div>';
-    } else {
-        currentSettlements.forEach(s => {
-            setList.innerHTML += `<li class="ledger-li" style="flex-direction: column; align-items: flex-start;">
-                <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                    <span><strong style="color:var(--danger); font-weight:700;">${sanitizeText(s.from)}</strong> <span style="color:var(--muted); font-size:0.9rem; margin:0 4px;">→</span> <strong style="color:var(--success); font-weight:700;">${sanitizeText(s.to)}</strong></span>
-                    <span class="settlement-amount">${curr}${s.amount.toFixed(2)}</span>
-                </div>
-                <button class="settle-action-btn" onclick="executeSettlement('${sanitizeText(s.from)}', '${sanitizeText(s.to)}', ${s.amount})">Mark as Paid</button>
-            </li>`;
-        });
-        document.getElementById('copySettlementsBtn').style.display = 'block'; 
-    }
-}
-</script>
+    </script>
 </body>
 </html>
