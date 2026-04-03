@@ -14,7 +14,7 @@
   <title>STA-2026 // ALAN KHOO</title>
   
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#000000">
+  <meta name="theme-color" content="#f9f9f9">
   
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet"/>
@@ -59,146 +59,118 @@
       background-position: 0 0, 0 2px, 2px 2px, 2px 0;
       opacity: 0.05;
     }
-    .corner-bracket-tl { border-top: 2px solid black; border-left: 2px solid black; width: 12px; height: 12px; position: absolute; top: -2px; left: -2px; }
-    .corner-bracket-tr { border-top: 2px solid black; border-right: 2px solid black; width: 12px; height: 12px; position: absolute; top: -2px; right: -2px; }
-    .corner-bracket-bl { border-bottom: 2px solid black; border-left: 2px solid black; width: 12px; height: 12px; position: absolute; bottom: -2px; left: -2px; }
-    .corner-bracket-br { border-bottom: 2px solid black; border-right: 2px solid black; width: 12px; height: 12px; position: absolute; bottom: -2px; right: -2px; }
+    .corner-bracket-tl { border-top: 2px solid black; border-left: 2px solid black; width: 8px; height: 8px; position: absolute; top: -2px; left: -2px; }
+    .corner-bracket-tr { border-top: 2px solid black; border-right: 2px solid black; width: 8px; height: 8px; position: absolute; top: -2px; right: -2px; }
+    .corner-bracket-bl { border-bottom: 2px solid black; border-left: 2px solid black; width: 8px; height: 8px; position: absolute; bottom: -2px; left: -2px; }
+    .corner-bracket-br { border-bottom: 2px solid black; border-right: 2px solid black; width: 8px; height: 8px; position: absolute; bottom: -2px; right: -2px; }
   </style>
 </head>
-<body class="bg-surface font-body text-on-surface selection:bg-primary selection:text-on-primary">
 
-  <div class="fixed top-8 right-12 z-50 font-pixel text-sm text-black" id="clk">--:--:-- GMT+8</div>
+<body class="bg-surface font-body text-on-surface selection:bg-primary selection:text-on-primary h-screen overflow-hidden flex flex-col relative">
 
-  <main class="relative min-h-screen pt-12">
-    <div class="pixel-grid absolute inset-0 pointer-events-none"></div>
+  <div class="pixel-grid absolute inset-0 pointer-events-none z-0"></div>
+  <div class="absolute inset-0 dither-gradient pointer-events-none z-0"></div>
 
-    <div class="fixed top-24 right-12 z-30 font-pixel text-xl tracking-tighter flex gap-6 hidden md:flex">
-      <div class="flex flex-col items-end">
-        <span class="text-[10px] opacity-40">ALTITUDE</span>
-        <span>55.0km</span>
-      </div>
-      <div class="flex flex-col items-end">
-        <span class="text-[10px] opacity-40">PHASE</span>
-        <span class="animate-pulse">DESCENT</span>
-      </div>
-    </div>
-
-    <section class="h-[80vh] flex flex-col justify-center px-12 md:px-24 relative overflow-hidden">
-      <div class="absolute inset-0 dither-gradient pointer-events-none"></div>
-      
-      <div class="relative z-10 max-w-4xl">
-        <span class="font-pixel text-[10px] text-secondary block mb-6 tracking-widest uppercase">Portfolio / Systems Operator</span>
-        <h1 class="font-headline text-[5rem] md:text-[8rem] font-black leading-none tracking-tighter mb-4 text-black mix-blend-difference">
-          WELCOME<span class="inline-block w-4 h-24 bg-primary animate-bounce ml-4 align-middle"></span>
+  <main class="flex-1 flex flex-col lg:flex-row items-center w-full max-w-[1600px] mx-auto px-8 lg:px-16 gap-12 relative z-10 h-full">
+    
+    <section class="w-full lg:w-5/12 flex flex-col justify-center h-full pt-12 lg:pt-0">
+      <div class="relative max-w-xl">
+        <span class="font-pixel text-[10px] text-secondary block mb-4 tracking-widest uppercase">Portfolio / Systems Operator</span>
+        
+        <h1 class="font-headline text-[3.5rem] xl:text-[5.5rem] font-black leading-none tracking-tighter mb-4 text-black mix-blend-difference">
+          WELCOME<span class="inline-block w-3 h-12 xl:h-16 bg-primary animate-bounce ml-2 align-middle"></span>
         </h1>
-        <p class="font-pixel text-lg md:text-xl text-black mb-12 max-w-2xl leading-relaxed">
+        
+        <p class="font-pixel text-xs xl:text-sm text-black mb-8 leading-relaxed max-w-md opacity-80">
           ARCHITECTING DIGITAL MISSIONS. WELCOME TO SECTOR STA-2026.
         </p>
-        <div class="flex items-center gap-8">
-          <a href="#projects" class="bg-black text-white px-10 py-5 font-pixel text-sm border-4 border-black hover:bg-transparent hover:text-black transition-all flex items-center gap-4 inline-block">
-            DEPLOY <span class="material-symbols-outlined">play_arrow</span>
-          </a>
-          <div class="hidden md:block h-[2px] w-48 bg-black/10"></div>
-        </div>
       </div>
     </section>
 
-    <section id="projects" class="py-32 px-12 md:px-24 bg-surface-container-low relative">
-      <div class="mb-20 flex justify-between items-end border-b-2 border-black pb-8">
+    <section class="w-full lg:w-7/12 flex flex-col justify-center h-full pb-12 lg:pb-0">
+      
+      <div class="mb-6 flex justify-between items-end border-b-2 border-black pb-3 w-full">
         <div>
-          <span class="font-pixel text-[10px] text-secondary block mb-2">DIRECTORY: /ACTIVE_MISSIONS</span>
-          <h2 class="font-headline text-5xl font-black tracking-tighter">DATA_ARCHIVE</h2>
+          <span class="font-pixel text-[8px] text-secondary block mb-1">DIRECTORY: /ACTIVE_MISSIONS</span>
+          <h2 class="font-headline text-3xl xl:text-4xl font-black tracking-tighter">DATA_ARCHIVE</h2>
         </div>
-        <div class="font-pixel text-xs text-secondary">[DEPLOYED: 002]</div>
+        <div class="font-pixel text-[10px] text-secondary">[DEPLOYED: 002]</div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-12 max-w-6xl">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
         
-        <a href="https://thousand-ai-miles.web.app/" onclick="trackClick('Upcoming Trip')" target="_blank" class="group relative bg-white p-8 transition-all hover:-translate-y-4 hover:shadow-[20px_20px_0px_0px_rgba(0,0,0,0.1)] border border-black/5 block cursor-pointer">
+        <a href="https://thousand-ai-miles.web.app/" onclick="trackClick('Upcoming Trip')" target="_blank" class="group relative bg-white p-5 xl:p-6 transition-all hover:-translate-y-2 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,0.1)] border border-black/5 block cursor-pointer flex flex-col h-full justify-between">
           <div class="corner-bracket-tl"></div><div class="corner-bracket-tr"></div>
           <div class="corner-bracket-bl"></div><div class="corner-bracket-br"></div>
           
-          <div class="aspect-video bg-black/5 mb-6 overflow-hidden relative flex items-center justify-center border border-black/10">
-            <span class="material-symbols-outlined text-[5rem] opacity-20 group-hover:opacity-100 transition-opacity">plane_departure</span>
-            <div class="absolute top-4 right-4 bg-black text-white font-pixel text-[8px] px-2 py-1">ACTIVE</div>
+          <div>
+            <div class="h-24 bg-black/5 mb-4 overflow-hidden relative flex items-center justify-center border border-black/10">
+              <span class="material-symbols-outlined text-[3.5rem] opacity-20 group-hover:opacity-100 transition-opacity">plane_departure</span>
+              <div class="absolute top-2 right-2 bg-black text-white font-pixel text-[6px] px-2 py-1">ACTIVE</div>
+            </div>
+            
+            <span class="font-pixel text-[8px] text-secondary mb-1 block">MISSION_001</span>
+            <h3 class="font-headline text-xl xl:text-2xl font-bold tracking-tight mb-2">JOURNALS & LEDGERS</h3>
+            <span class="font-pixel text-[7px] text-primary block mb-3 bg-black/5 inline-block px-2 py-1">TRAVEL // AI</span>
+            
+            <p class="text-xs opacity-70 mb-5 leading-relaxed font-body font-medium">A visual itinerary architect for your next global escape. Powered by intelligence, shaped by curiosity.</p>
           </div>
           
-          <span class="font-pixel text-[10px] text-secondary mb-2 block">MISSION_001</span>
-          <h3 class="font-headline text-2xl font-bold tracking-tight mb-2">JOURNEYS & LEDGERS</h3>
-          <span class="font-pixel text-[8px] text-primary block mb-4 bg-black/5 inline-block px-2 py-1">TRAVEL // AI</span>
-          
-          <p class="text-sm opacity-70 mb-8 leading-relaxed font-body font-medium">A visual itinerary architect for your next global escape. Powered by intelligence, shaped by curiosity.</p>
-          
-          <div class="flex justify-between items-center">
-            <span class="font-headline font-bold text-xs tracking-widest border-b-2 border-black">DEPLOY_SYSTEM</span>
+          <div class="flex justify-between items-center pt-3 border-t border-black/5">
+            <span class="font-headline font-bold text-[10px] tracking-widest border-b border-black">DEPLOY_SYSTEM</span>
             <div class="flex gap-1">
-              <div class="w-2 h-2 bg-black"></div>
-              <div class="w-2 h-2 bg-black/20"></div>
-              <div class="w-2 h-2 bg-black/20"></div>
+              <div class="w-1.5 h-1.5 bg-black"></div>
+              <div class="w-1.5 h-1.5 bg-black/20"></div>
+              <div class="w-1.5 h-1.5 bg-black/20"></div>
             </div>
           </div>
         </a>
 
-        <a href="https://thousand-ai-books.web.app/" onclick="trackClick('ALAN RPG')" target="_blank" class="group relative bg-white p-8 transition-all hover:-translate-y-4 hover:shadow-[20px_20px_0px_0px_rgba(0,0,0,0.1)] border border-black/5 block cursor-pointer">
+        <a href="https://thousand-ai-books.web.app/" onclick="trackClick('ALAN RPG')" target="_blank" class="group relative bg-white p-5 xl:p-6 transition-all hover:-translate-y-2 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,0.1)] border border-black/5 block cursor-pointer flex flex-col h-full justify-between">
           <div class="corner-bracket-tl"></div><div class="corner-bracket-tr"></div>
           <div class="corner-bracket-bl"></div><div class="corner-bracket-br"></div>
           
-          <div class="aspect-video bg-black/5 mb-6 overflow-hidden relative flex items-center justify-center border border-black/10">
-            <span class="material-symbols-outlined text-[5rem] opacity-20 group-hover:opacity-100 transition-opacity">gamepad</span>
-            <div class="absolute top-4 right-4 bg-black text-white font-pixel text-[8px] px-2 py-1">STABLE</div>
+          <div>
+            <div class="h-24 bg-black/5 mb-4 overflow-hidden relative flex items-center justify-center border border-black/10">
+              <span class="material-symbols-outlined text-[3.5rem] opacity-20 group-hover:opacity-100 transition-opacity">gamepad</span>
+              <div class="absolute top-2 right-2 bg-black text-white font-pixel text-[6px] px-2 py-1">STABLE</div>
+            </div>
+            
+            <span class="font-pixel text-[8px] text-secondary mb-1 block">MISSION_002</span>
+            <h3 class="font-headline text-xl xl:text-2xl font-bold tracking-tight mb-2">LEARNOW</h3>
+            <span class="font-pixel text-[7px] text-primary block mb-3 bg-black/5 inline-block px-2 py-1">EDTECH // RPG</span>
+            
+            <p class="text-xs opacity-70 mb-5 leading-relaxed font-body font-medium">Gamifying the path to knowledge. Level up your learning — one quest at a time.</p>
           </div>
           
-          <span class="font-pixel text-[10px] text-secondary mb-2 block">MISSION_002</span>
-          <h3 class="font-headline text-2xl font-bold tracking-tight mb-2">LEARNOW</h3>
-          <span class="font-pixel text-[8px] text-primary block mb-4 bg-black/5 inline-block px-2 py-1">EDTECH // RPG</span>
-          
-          <p class="text-sm opacity-70 mb-8 leading-relaxed font-body font-medium">Gamifying the path to knowledge. Level up your learning — one quest at a time.</p>
-          
-          <div class="flex justify-between items-center">
-            <span class="font-headline font-bold text-xs tracking-widest border-b-2 border-black">DEPLOY_SYSTEM</span>
+          <div class="flex justify-between items-center pt-3 border-t border-black/5">
+            <span class="font-headline font-bold text-[10px] tracking-widest border-b border-black">DEPLOY_SYSTEM</span>
             <div class="flex gap-1">
-              <div class="w-2 h-2 bg-black"></div>
-              <div class="w-2 h-2 bg-black"></div>
-              <div class="w-2 h-2 bg-black/20"></div>
+              <div class="w-1.5 h-1.5 bg-black"></div>
+              <div class="w-1.5 h-1.5 bg-black"></div>
+              <div class="w-1.5 h-1.5 bg-black/20"></div>
             </div>
           </div>
         </a>
 
       </div>
     </section>
+
   </main>
 
-  <footer class="w-full bg-neutral-100 dark:bg-neutral-900 border-t-0 py-12 px-8 flex flex-col items-center gap-6">
-    <div class="bg-neutral-300 dark:bg-neutral-700 h-[1px] mb-8 w-full max-w-4xl"></div>
-    <div class="flex gap-12 font-['Space_Grotesk'] text-[10px] tracking-[0.2em] font-medium uppercase">
-      <a href="https://github.com/alankhoocl" target="_blank" class="opacity-60 hover:opacity-100 hover:text-black dark:hover:text-white transition-opacity underline font-bold">SOURCE_CODE (GITHUB)</a>
-      <a href="https://alankcl.com" class="opacity-60 hover:opacity-100 hover:text-black dark:hover:text-white transition-opacity">TERMINAL_ACCESS (ALANKCL.COM)</a>
+  <footer class="w-full border-t border-black/10 py-5 px-8 md:px-16 flex flex-col md:flex-row justify-between items-center gap-4 bg-surface z-20 font-['Space_Grotesk'] text-[9px] tracking-[0.2em] font-medium uppercase shrink-0">
+    <div class="flex gap-8">
+      <a href="https://github.com/alankhoocl" target="_blank" class="opacity-60 hover:opacity-100 hover:text-black transition-opacity underline font-bold">SOURCE_CODE (GITHUB)</a>
+      <a href="https://alankcl.com" target="_blank" class="opacity-60 hover:opacity-100 hover:text-black transition-opacity">TERMINAL_ACCESS (ALANKCL.COM)</a>
     </div>
-    <div class="mt-8 font-['Space_Grotesk'] text-[10px] tracking-[0.2em] font-medium opacity-60">
+    <div class="opacity-50">
       © 2026 BINARY_BRUTALISM // ALAN KHOO
-    </div>
-    <div class="mt-4 animate-bounce">
-      <a href="#"><span class="material-symbols-outlined text-black/20">expand_less</span></a>
     </div>
   </footer>
 
   <script>
     // GA Tracker
     function trackClick(n){ gtag('event','select_content',{item_id:n}); }
-
-    // GMT+8 Clock
-    setInterval(() => {
-      const t = new Date();
-      // Format time to Asia/Singapore (GMT+8) in 24-hour format
-      const timeString = t.toLocaleTimeString('en-GB', { 
-        timeZone: 'Asia/Singapore', 
-        hour12: false,
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-      });
-      document.getElementById('clk').textContent = timeString + ' GMT+8';
-    }, 1000);
   </script>
 </body>
 </html>
