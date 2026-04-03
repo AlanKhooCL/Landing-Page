@@ -67,55 +67,9 @@
 </head>
 <body class="bg-surface font-body text-on-surface selection:bg-primary selection:text-on-primary">
 
-  <nav class="fixed top-0 w-full z-50 rounded-none border-b-0 bg-white/80 dark:bg-black/80 backdrop-blur-xl">
-    <div class="flex justify-between items-center w-full px-6 py-4 mx-auto">
-      <div class="text-xl font-black tracking-widest text-black dark:text-white font-headline">
-        STA-2026
-      </div>
-      <div class="hidden md:flex gap-8 items-center">
-        <a class="font-headline uppercase tracking-tighter font-bold text-black dark:text-white border-b-4 border-black dark:border-white pb-1 cursor-pointer active:translate-y-0.5 transition-all" href="#">MISSION CONTROL</a>
-        <a class="font-headline uppercase tracking-tighter font-bold text-neutral-500 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors cursor-pointer active:translate-y-0.5 transition-all" href="#projects">MISSIONS</a>
-        <a class="font-headline uppercase tracking-tighter font-bold text-neutral-500 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors cursor-pointer active:translate-y-0.5 transition-all" href="#profile">SYSTEM_LOG</a>
-      </div>
-      <div class="flex gap-4">
-        <span class="material-symbols-outlined text-black dark:text-white cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-900 p-1" id="clk">--:--:-- UTC</span>
-      </div>
-    </div>
-    <div class="bg-neutral-200 dark:bg-neutral-800 h-[1px] w-full"></div>
-  </nav>
+  <div class="fixed top-8 right-12 z-50 font-pixel text-sm text-black" id="clk">--:--:-- GMT+8</div>
 
-  <aside class="fixed right-8 top-1/2 -translate-y-1/2 w-64 border-l-4 border-black dark:border-white bg-white/90 dark:bg-black/90 backdrop-blur-2xl flex flex-col p-4 z-40 shadow-[12px_12px_0px_0px_rgba(0,0,0,0.1)] hidden lg:flex">
-    <div class="mb-6 flex items-center gap-3">
-      <div class="w-10 h-10 bg-primary flex items-center justify-center">
-        <span class="material-symbols-outlined text-white">terminal</span>
-      </div>
-      <div>
-        <p class="font-pixel text-[10px] text-primary">ALAN_KHOO</p>
-        <p class="font-pixel text-[8px] text-secondary">LVL 99 // HP 100%</p>
-      </div>
-    </div>
-    
-    <div class="flex flex-col p-4 z-40 divide-y-0 space-y-4">
-      <div class="bg-black dark:bg-white text-white dark:text-black p-4 flex items-center gap-4 transition-transform duration-200 hover:-translate-x-2 cursor-pointer">
-        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person</span>
-        <span class="font-headline uppercase text-xs font-bold tracking-widest">SYS_OP</span>
-      </div>
-      <div class="text-black dark:text-white p-4 border border-black/10 dark:border-white/10 flex items-center gap-4 transition-transform duration-200 hover:-translate-x-2 cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-800">
-        <span class="material-symbols-outlined">rocket_launch</span>
-        <span class="font-headline uppercase text-xs font-bold tracking-widest">TELEMETRY</span>
-      </div>
-      <div class="text-black dark:text-white p-4 border border-black/10 dark:border-white/10 flex items-center gap-4 transition-transform duration-200 hover:-translate-x-2 cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-800">
-        <span class="material-symbols-outlined">data_object</span>
-        <span class="font-headline uppercase text-xs font-bold tracking-widest">DATA_CORE</span>
-      </div>
-    </div>
-    
-    <button class="mt-8 bg-primary text-on-primary py-4 font-pixel text-[10px] tracking-tighter hover:bg-primary-container transition-all active:translate-y-1">
-      INITIATE FULL DIVE
-    </button>
-  </aside>
-
-  <main class="relative min-h-screen pt-20">
+  <main class="relative min-h-screen pt-12">
     <div class="pixel-grid absolute inset-0 pointer-events-none"></div>
 
     <div class="fixed top-24 right-12 z-30 font-pixel text-xl tracking-tighter flex gap-6 hidden md:flex">
@@ -170,7 +124,7 @@
           </div>
           
           <span class="font-pixel text-[10px] text-secondary mb-2 block">MISSION_001</span>
-          <h3 class="font-headline text-2xl font-bold tracking-tight mb-2">JOURNALS & LEDGERS</h3>
+          <h3 class="font-headline text-2xl font-bold tracking-tight mb-2">JOURNEYS & LEDGERS</h3>
           <span class="font-pixel text-[8px] text-primary block mb-4 bg-black/5 inline-block px-2 py-1">TRAVEL // AI</span>
           
           <p class="text-sm opacity-70 mb-8 leading-relaxed font-body font-medium">A visual itinerary architect for your next global escape. Powered by intelligence, shaped by curiosity.</p>
@@ -212,80 +166,6 @@
 
       </div>
     </section>
-
-    <section id="profile" class="py-32 px-12 md:px-24 flex flex-col md:flex-row gap-16 items-start">
-      <div class="w-full md:w-1/3 sticky top-32">
-        <div class="relative p-2 bg-black border-4 border-black aspect-square flex items-center justify-center">
-            <span class="material-symbols-outlined text-white text-[8rem] opacity-50">data_exploration</span>
-            <div class="absolute bottom-0 left-0 right-0 bg-black/60 backdrop-blur-md p-4 flex flex-col gap-2">
-            <div class="flex justify-between font-pixel text-[8px] text-white">
-              <span>HP</span>
-              <span>100%</span>
-            </div>
-            <div class="h-1 w-full bg-white/20">
-              <div class="h-full bg-white w-full"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="w-full md:w-2/3">
-        <div class="mb-12">
-          <span class="font-pixel text-[10px] text-secondary block mb-2">SYSTEM_LOG // PROFILE_O1</span>
-          <h2 class="font-headline text-6xl font-black tracking-tighter mb-6">ARCHITECT OF THE VOID</h2>
-          <p class="text-xl leading-relaxed opacity-80 mb-8">
-            I specialize in building high-performance digital environments where data meets aesthetics. My philosophy is rooted in the brutalist efficiency of binary systems and the immersive potential of web applications.
-          </p>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 py-12 border-t border-black/10">
-            <div>
-              <span class="font-pixel text-[8px] text-secondary mb-4 block">ACTIVE_SKILLS</span>
-              <ul class="space-y-4">
-                <li class="flex items-center gap-3">
-                  <span class="w-2 h-2 bg-black"></span>
-                  <span class="font-headline font-bold tracking-tight">DATA_ANALYTICS</span>
-                </li>
-                <li class="flex items-center gap-3">
-                  <span class="w-2 h-2 bg-black"></span>
-                  <span class="font-headline font-bold tracking-tight">AI_ENGINEERING</span>
-                </li>
-                <li class="flex items-center gap-3">
-                  <span class="w-2 h-2 bg-black"></span>
-                  <span class="font-headline font-bold tracking-tight">WEB_DEVELOPMENT</span>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <span class="font-pixel text-[8px] text-secondary mb-4 block">EQUIPPED_TOOLS</span>
-              <ul class="space-y-4">
-                <li class="flex items-center gap-3">
-                  <span class="w-2 h-2 bg-black/40"></span>
-                  <span class="font-headline font-bold tracking-tight">PYTHON_CORE</span>
-                </li>
-                <li class="flex items-center gap-3">
-                  <span class="w-2 h-2 bg-black/40"></span>
-                  <span class="font-headline font-bold tracking-tight">SQL_MATRIX</span>
-                </li>
-                <li class="flex items-center gap-3">
-                  <span class="w-2 h-2 bg-black/40"></span>
-                  <span class="font-headline font-bold tracking-tight">NODE.JS_RUNTIME</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div class="bg-surface-container p-8 relative">
-          <div class="corner-bracket-tl"></div><div class="corner-bracket-br"></div>
-          <p class="font-pixel text-[10px] leading-loose">
-            // INITIALIZING CONNECTION... <br/>
-            // HANDSHAKE SUCCESSFUL <br/>
-            // CURRENT STATUS: ALL SYSTEMS NOMINAL <br/>
-            // ENCRYPTED_MESSAGE: "Crafted in the stars."
-          </p>
-        </div>
-      </div>
-    </section>
   </main>
 
   <footer class="w-full bg-neutral-100 dark:bg-neutral-900 border-t-0 py-12 px-8 flex flex-col items-center gap-6">
@@ -306,11 +186,19 @@
     // GA Tracker
     function trackClick(n){ gtag('event','select_content',{item_id:n}); }
 
-    // UTC Clock
-    setInterval(()=>{
-      const t=new Date();
-      document.getElementById('clk').textContent=t.toUTCString().split(' ')[4]+' UTC';
-    },1000);
+    // GMT+8 Clock
+    setInterval(() => {
+      const t = new Date();
+      // Format time to Asia/Singapore (GMT+8) in 24-hour format
+      const timeString = t.toLocaleTimeString('en-GB', { 
+        timeZone: 'Asia/Singapore', 
+        hour12: false,
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      });
+      document.getElementById('clk').textContent = timeString + ' GMT+8';
+    }, 1000);
   </script>
 </body>
 </html>
