@@ -66,14 +66,16 @@
   </style>
 </head>
 
-<body class="bg-surface font-body text-on-surface selection:bg-primary selection:text-on-primary h-screen overflow-hidden flex flex-col relative">
+<body class="bg-surface font-body text-on-surface selection:bg-primary selection:text-on-primary min-h-screen lg:h-screen lg:overflow-hidden flex flex-col relative overflow-x-hidden">
 
   <div class="pixel-grid absolute inset-0 pointer-events-none z-0"></div>
   <div class="absolute inset-0 dither-gradient pointer-events-none z-0"></div>
 
-  <main class="flex-1 flex flex-col lg:flex-row items-center w-full max-w-[1600px] mx-auto px-8 lg:px-16 gap-12 relative z-10 h-full">
+  <div class="absolute lg:fixed top-8 right-8 lg:right-12 z-50 font-pixel text-[10px] lg:text-sm text-black" id="clk">--:--:-- GMT+8</div>
+
+  <main class="flex-1 flex flex-col lg:flex-row items-center w-full max-w-[1600px] mx-auto px-6 lg:px-16 py-16 lg:py-0 gap-12 lg:gap-16 relative z-10 h-full">
     
-    <section class="w-full lg:w-5/12 flex flex-col justify-center h-full pt-12 lg:pt-0">
+    <section class="w-full lg:w-5/12 flex flex-col justify-center lg:h-full mt-8 lg:mt-0">
       <div class="relative max-w-xl">
         <span class="font-pixel text-[10px] text-secondary block mb-4 tracking-widest uppercase">Portfolio / Systems Operator</span>
         
@@ -87,7 +89,7 @@
       </div>
     </section>
 
-    <section class="w-full lg:w-7/12 flex flex-col justify-center h-full pb-12 lg:pb-0">
+    <section class="w-full lg:w-7/12 flex flex-col justify-center lg:h-full pb-8 lg:pb-0">
       
       <div class="mb-6 flex justify-between items-end border-b-2 border-black pb-3 w-full">
         <div>
@@ -97,7 +99,7 @@
         <div class="font-pixel text-[10px] text-secondary">[DEPLOYED: 002]</div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
         
         <a href="https://thousand-ai-miles.web.app/" onclick="trackClick('Upcoming Trip')" target="_blank" class="group relative bg-white p-5 xl:p-6 transition-all hover:-translate-y-2 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,0.1)] border border-black/5 block cursor-pointer flex flex-col h-full justify-between">
           <div class="corner-bracket-tl"></div><div class="corner-bracket-tr"></div>
@@ -158,12 +160,12 @@
 
   </main>
 
-  <footer class="w-full border-t border-black/10 py-5 px-8 md:px-16 flex flex-col md:flex-row justify-between items-center gap-4 bg-surface z-20 font-['Space_Grotesk'] text-[9px] tracking-[0.2em] font-medium uppercase shrink-0">
-    <div class="flex gap-8">
+  <footer class="w-full border-t border-black/10 py-5 px-6 lg:px-16 flex flex-col lg:flex-row justify-between items-center gap-4 bg-surface z-20 font-['Space_Grotesk'] text-[8px] lg:text-[9px] tracking-[0.2em] font-medium uppercase shrink-0 mt-auto">
+    <div class="flex flex-wrap justify-center gap-6 lg:gap-8">
       <a href="https://github.com/alankhoocl" target="_blank" class="opacity-60 hover:opacity-100 hover:text-black transition-opacity underline font-bold">SOURCE_CODE (GITHUB)</a>
       <a href="https://alankcl.com" target="_blank" class="opacity-60 hover:opacity-100 hover:text-black transition-opacity">TERMINAL_ACCESS (ALANKCL.COM)</a>
     </div>
-    <div class="opacity-50">
+    <div class="opacity-50 text-center">
       © 2026 BINARY_BRUTALISM // ALAN KHOO
     </div>
   </footer>
@@ -171,6 +173,20 @@
   <script>
     // GA Tracker
     function trackClick(n){ gtag('event','select_content',{item_id:n}); }
+
+    // GMT+8 Clock
+    setInterval(() => {
+      const t = new Date();
+      // Format time to Asia/Singapore (GMT+8) in 24-hour format
+      const timeString = t.toLocaleTimeString('en-GB', { 
+        timeZone: 'Asia/Singapore', 
+        hour12: false,
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      });
+      document.getElementById('clk').textContent = timeString + ' GMT+8';
+    }, 1000);
   </script>
 </body>
 </html>
